@@ -107,84 +107,10 @@ namespace Expressions.Shortcuts
             return result;
         }
         
+        private static readonly ExpressionExtractorVisitor ExtractorVisitor = new ExpressionExtractorVisitor();
         internal static Expression ExtractArgument(Expression expr)
         {
-            return ExtractFromExpression(expr);
-        }
-
-        private static readonly ExpressionExtractorVisitor ExtractorVisitor = new ExpressionExtractorVisitor();
-        private static Expression ExtractFromExpression(Expression expression)
-        {
-            return ExtractorVisitor.Visit(expression);
-            // while (true)
-            // {
-            //     switch (expression)
-            //     {
-            //         case MethodCallExpression methodCall:
-            //             return Expression.Lambda(methodCall).Compile().DynamicInvoke();
-            //         
-            //         case LambdaExpression lambda:
-            //             return ProcessCallLambda(lambda);
-            //         
-            //         case MemberExpression memberExpression:
-            //             switch (memberExpression.Expression)
-            //             {
-            //                 case ConstantExpression constant:
-            //                     var constantValue = constant.Value;
-            //                     var value = constantValue.GetType().GetField(memberExpression.Member.Name)?.GetValue(constantValue);
-            //                     if (value is ExpressionContainer) return value;
-            //                     return Expression.Convert(Expression.Constant(value), memberExpression.Type);
-            //
-            //                 default: 
-            //                     return memberExpression;
-            //             }
-            //
-            //         case UnaryExpression unaryExpression:
-            //             switch (unaryExpression.NodeType)
-            //             {
-            //                 case ExpressionType.ConvertChecked:
-            //                 case ExpressionType.Convert:
-            //                     if (typeof(ExpressionContainer).IsAssignableFrom(unaryExpression.Operand.Type))
-            //                     {
-            //                         var operand = ExtractArgument(unaryExpression.Operand);
-            //                         if (operand.Type != unaryExpression.Type)
-            //                         {
-            //                             return Expression.Convert(operand, unaryExpression.Type);
-            //                         }
-            //
-            //                         if (operand.NodeType == ExpressionType.Call || operand.NodeType == ExpressionType.Invoke || operand.NodeType == ExpressionType.Lambda)
-            //                         {
-            //                             return operand;
-            //                         }
-            //
-            //                         expression = operand;
-            //                         continue;
-            //                     }
-            //                     
-            //                     if (unaryExpression.Type != unaryExpression.Operand.Type)
-            //                     {
-            //                         return expression;
-            //                     }
-            //                     
-            //                     expression = unaryExpression.Operand;
-            //                     continue;
-            //
-            //                 default:
-            //                     return unaryExpression.Update(ExtractArgument(unaryExpression.Operand));
-            //             }
-            //
-            //         case BinaryExpression binaryExpression:
-            //         {
-            //             var left = ExtractArgument(binaryExpression.Left);
-            //             var right = ExtractArgument(binaryExpression.Right);
-            //
-            //             return binaryExpression.Update(left, binaryExpression.Conversion, right);
-            //         }
-            //         
-            //         default:
-            //             return expression;
-            //     }
-            // }
+            return ExtractorVisitor.Visit(expr);
         }
     }
 }
