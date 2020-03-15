@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <DebugType>portable</DebugType>
+        <TargetFrameworks>net452;netstandard1.3;netstandard2.0</TargetFrameworks>
+        <RootNamespace>Expressions.Shortcuts</RootNamespace>
+        <ProjectGuid>B056DA03-44B9-4903-8534-E8F14553C915</ProjectGuid>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Version>1.0.0</Version>
+        <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <Authors>Oleh Formaniuk</Authors>
+        <Copyright>Copyright © 2020 Oleh Formaniuk</Copyright>
+        <Description>A set of APIs for to simplify work with System.Linq.Expressions</Description>
+        <PackageIcon>https://raw.githubusercontent.com/zjklee/ExpressionShortcuts/master/icon.png</PackageIcon>
+        <PackageId>ExpressionShortcuts</PackageId>
+        <PackageLicense>https://opensource.org/licenses/mit</PackageLicense>
+        <PackageProjectUrl>https://github.com/zjklee/ExpressionShortcuts</PackageProjectUrl>
+        <PackageTags>expression-tree;expressions</PackageTags>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/zjklee/ExpressionShortcuts</RepositoryUrl>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+        <DefineConstants>$(DefineConstants);netstandard;netstandard1_3</DefineConstants>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <DefineConstants>$(DefineConstants);netstandard</DefineConstants>
+    </PropertyGroup>
+    
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+        <PackageReference Include="System.Reflection.TypeExtensions " Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="netstandard2.0\**" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+        <Compile Include="$(TargetFramework)\**" />
+    </ItemGroup>
+    
+</Project>
