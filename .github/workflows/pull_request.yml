@@ -1,0 +1,65 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Pull Request
+
+# Controls when the action will run. Triggers the workflow on push or pull request 
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.102
+      - name: Build
+        working-directory: ./src
+        run: dotnet build -c Release ./ExpressionShortcuts/ExpressionShortcuts.csproj
+  
+  test:
+    name: Test - Windows
+    runs-on: windows-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.102
+      - name: Test
+        working-directory: ./src
+        run: dotnet test ./ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj
+  
+  sonar:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Sonarscanner for dotnet
+      uses: Secbyte/dotnet-sonarscanner@v2.2
+      with:
+        buildCommand: dotnet build src/ExpressionShortcuts/ExpressionShortcuts.csproj -f netstandard2.0
+        testCommand: dotnet test src/ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj --collect:"XPlat code coverage" --settings coverlet.runsettings
+        projectKey: zjklee_ExpressionShortcuts
+        projectName: ExpressionShortcuts
+        sonarOrganisation: zjklee
+        beginArguments: >
+            /d:sonar.verbose="true"
+            /d:sonar.cs.opencover.reportsPaths='"*.opencover.xml"'
+            /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
+            /d:sonar.pullrequest.key=${{ github.event.number }}
+            /d:sonar.pullrequest.branch=${{ github.event.pull_request.head.ref }}
+            /d:sonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
