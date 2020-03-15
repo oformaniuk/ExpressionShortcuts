@@ -20,7 +20,7 @@
         <Authors>Oleh Formaniuk</Authors>
         <Copyright>Copyright © 2020 Oleh Formaniuk</Copyright>
         <Description>A set of APIs for to simplify work with System.Linq.Expressions</Description>
-        <PackageIcon>https://raw.githubusercontent.com/zjklee/ExpressionShortcuts/master/icon.png</PackageIcon>
+        <PackageIcon>icon.png</PackageIcon>
         <PackageId>ExpressionShortcuts</PackageId>
         <PackageLicense>https://opensource.org/licenses/mit</PackageLicense>
         <PackageProjectUrl>https://github.com/zjklee/ExpressionShortcuts</PackageProjectUrl>
@@ -30,6 +30,10 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="icon.png" Visible="false" Pack="true" PackagePath=""/>
+    </ItemGroup>
+    
     <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
         <DefineConstants>$(DefineConstants);netstandard;netstandard1_3</DefineConstants>
     </PropertyGroup>
