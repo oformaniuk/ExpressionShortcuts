@@ -20,9 +20,9 @@
         <Authors>Oleh Formaniuk</Authors>
         <Copyright>Copyright © 2020 Oleh Formaniuk</Copyright>
         <Description>A set of APIs for to simplify work with System.Linq.Expressions</Description>
-        <PackageIconUrl>https://raw.githubusercontent.com/zjklee/ExpressionShortcuts/master/icon.png</PackageIconUrl>
+        <PackageIcon>https://raw.githubusercontent.com/zjklee/ExpressionShortcuts/master/icon.png</PackageIcon>
         <PackageId>ExpressionShortcuts</PackageId>
-        <PackageLicenseUrl>https://opensource.org/licenses/mit</PackageLicenseUrl>
+        <PackageLicense>https://opensource.org/licenses/mit</PackageLicense>
         <PackageProjectUrl>https://github.com/zjklee/ExpressionShortcuts</PackageProjectUrl>
         <PackageTags>expression-tree;expressions</PackageTags>
         <RepositoryType>git</RepositoryType>
