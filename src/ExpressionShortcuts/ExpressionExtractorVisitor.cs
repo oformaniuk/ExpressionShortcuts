@@ -40,33 +40,33 @@ namespace Expressions.Shortcuts
             }
         }
 
-        protected override Expression VisitUnary(UnaryExpression unaryExpression)
+        protected override Expression VisitUnary(UnaryExpression node)
         {
-            switch (unaryExpression.NodeType)
+            switch (node.NodeType)
             {
                 case ExpressionType.ConvertChecked:
                 case ExpressionType.Convert:
                 {
-                    if (!typeof(ExpressionContainer).IsAssignableFrom(unaryExpression.Operand.Type))
-                        return unaryExpression.Type == unaryExpression.Operand.Type
-                            ? unaryExpression.Update(ConvertToExpression(unaryExpression.Operand, Visit) ?? Expression.Empty())
-                            : unaryExpression;
+                    if (!typeof(ExpressionContainer).IsAssignableFrom(node.Operand.Type))
+                        return node.Type == node.Operand.Type
+                            ? node.Update(ConvertToExpression(node.Operand, Visit) ?? Expression.Empty())
+                            : node;
                     
-                    var operand = ConvertToExpression(unaryExpression.Operand, Visit) ?? Expression.Empty();
+                    var operand = ConvertToExpression(node.Operand, Visit) ?? Expression.Empty();
                     if (operand.Type == typeof(void)) return operand;
 
-                    if (typeof(ExpressionContainer).IsAssignableFrom(unaryExpression.Type))
+                    if (typeof(ExpressionContainer).IsAssignableFrom(node.Type))
                     {
                         return operand;
                     }
                     
-                    return operand.Type != unaryExpression.Type 
-                        ? Expression.Convert(operand, unaryExpression.Type) 
+                    return operand.Type != node.Type 
+                        ? Expression.Convert(operand, node.Type) 
                         : operand;
                 }
 
                 default:
-                    return unaryExpression.Update(ConvertToExpression(unaryExpression.Operand, Visit) ?? Expression.Empty());
+                    return node.Update(ConvertToExpression(node.Operand, Visit) ?? Expression.Empty());
             }
         }
 
