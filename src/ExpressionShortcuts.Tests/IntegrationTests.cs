@@ -600,7 +600,7 @@ namespace Expressions.Shortcuts.Tests
                 .Lambda<Action>()
                 .Compile()
                 .Invoke();
-            
+
             _ = _mock.Received(count).Self;
             _mock.Received(1).VoidMethodWithParameter("aaa");
         }

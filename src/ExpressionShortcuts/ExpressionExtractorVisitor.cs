@@ -55,6 +55,11 @@ namespace Expressions.Shortcuts
                     var operand = ConvertToExpression(unaryExpression.Operand, Visit) ?? Expression.Empty();
                     if (operand.Type == typeof(void)) return operand;
 
+                    if (typeof(ExpressionContainer).IsAssignableFrom(unaryExpression.Type))
+                    {
+                        return operand;
+                    }
+                    
                     return operand.Type != unaryExpression.Type 
                         ? Expression.Convert(operand, unaryExpression.Type) 
                         : operand;
