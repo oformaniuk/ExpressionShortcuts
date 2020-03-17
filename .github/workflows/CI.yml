@@ -74,4 +74,4 @@ jobs:
         run: echo "::set-env name=VERSION::$(git describe --tags --abbrev=0)"    
       - name: publish
         working-directory: ./src
-        run: dotnet pack -c Release  /p:version=$VERSION.${{ github.run_number }}-beta && dotnet nuget push **/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet pack -c Release  /p:version=${{ VERSION }}.${{ github.run_number }}-beta && dotnet nuget push **/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
