@@ -22,17 +22,16 @@ jobs:
     needs: [build]
     steps:
       - uses: actions/checkout@master
-      - name: Setup dotnet 1.1
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 1.1.14
-      - name: Setup dotnet
+      - name: Setup dotnet 3.1
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.102
-      - name: Test
+      - name: Test netcoreapp3.1
         working-directory: ./src
-        run: dotnet test ./ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj --logger:trx
+        run: dotnet test ./ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj -f netcoreapp3.1 --logger:trx
+      - name: Test net452
+        working-directory: ./src
+        run: dotnet test ./ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj -f net452 --logger:trx
   
   sonar-pr:
     name: sonarcloud
