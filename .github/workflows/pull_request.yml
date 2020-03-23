@@ -26,6 +26,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.102
+      - name: Setup dotnet 1.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 1.1.14
       - name: Test
         working-directory: ./src
         run: dotnet test ./ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj --logger:trx
