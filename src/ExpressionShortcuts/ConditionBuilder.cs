@@ -8,9 +8,9 @@ namespace Expressions.Shortcuts
     /// </summary>
     public class ConditionBuilder : ExpressionContainer
     {
-        private Expression? _condition;
-        private Expression? _then;
-        private Expression? _else;
+        private Expression _condition;
+        private Expression _then;
+        private Expression _else;
 
         internal ConditionBuilder() : base(Expression.Empty())
         {

@@ -1,0 +1,9 @@
+<Project>
+    
+    <ItemGroup>
+        <Compile Update="$(MSBuildThisFileDirectory)..\contentFiles\**\*.*">
+            <Visible>false</Visible>
+        </Compile>  
+    </ItemGroup>
+    
+</Project>

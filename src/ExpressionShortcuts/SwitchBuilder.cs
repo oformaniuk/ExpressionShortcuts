@@ -16,7 +16,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// 
         /// </summary>
-        protected Expression? DefaultCase;
+        protected Expression DefaultCase;
         
         /// <summary>
         /// 
@@ -31,7 +31,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// 
         /// </summary>
-        protected MethodInfo? ComparerMethod { get; set; }
+        protected MethodInfo ComparerMethod { get; set; }
 
         internal SwitchBuilder(ExpressionContainer<T> value) : base(Expression.Empty())
         {
@@ -145,7 +145,7 @@ namespace Expressions.Shortcuts
         /// <returns></returns>
         public SwitchBuilder<T> Case(ExpressionContainer expression, params ExpressionContainer<T>[] testValues)
         {
-            Cases.Add(System.Linq.Expressions.Expression.SwitchCase(expression, testValues.Select(o => o.Expression)));
+            Cases.Add(Expression.SwitchCase(expression, testValues.Select(o => o.Expression)));
             
             return this;
         }
