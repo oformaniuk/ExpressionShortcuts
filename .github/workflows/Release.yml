@@ -15,6 +15,14 @@ jobs:
         with:
           dotnet-version: 3.1.100
 
+      - name: pack binary
+        working-directory: ./src
+        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.csproj -c Release /p:version=${{ github.event.release.tag_name }}
+        
+      - name: pack binary
+        working-directory: ./src
+        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.Source.csproj /p:version=${{ github.event.release.tag_name }}
+        
       - name: publish
         working-directory: ./src
-        run: dotnet pack -c Release  /p:version=${{ github.event.release.tag_name }} && dotnet nuget push **/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push **/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

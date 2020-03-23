@@ -10,11 +10,11 @@ namespace Expressions.Shortcuts
     /// </summary>
     public class BlockBuilder: ExpressionContainer
     {
-        private readonly Type? _returnType;
+        private readonly Type _returnType;
         private readonly List<Expression> _expressions;
         private readonly HashSet<ParameterExpression> _parameters;
 
-        internal BlockBuilder(Type? returnType) : base(Expression.Empty())
+        internal BlockBuilder(Type returnType) : base(Expression.Empty())
         {
             _returnType = returnType;
             _expressions = new List<Expression>();

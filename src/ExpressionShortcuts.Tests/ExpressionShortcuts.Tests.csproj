@@ -1,11 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net452;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>net452;netcoreapp1.1;netcoreapp3.1</TargetFrameworks>
         <IsPackable>false</IsPackable>
         <RootNamespace>Expressions.Shortcuts.Tests</RootNamespace>
         <LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
         <ProjectGuid>6F69915C-EF93-4693-A8F8-EA74FA4A3BD3</ProjectGuid>
     </PropertyGroup>
 

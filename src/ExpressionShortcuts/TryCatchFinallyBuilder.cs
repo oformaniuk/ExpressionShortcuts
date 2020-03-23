@@ -12,8 +12,8 @@ namespace Expressions.Shortcuts
     {
         private readonly List<CatchBlock> _catchBlocks = new List<CatchBlock>();
         
-        private Expression? _finallyBody;
-        private Expression? _body;
+        private Expression _finallyBody;
+        private Expression _body;
 
         internal TryCatchFinallyBuilder() : base(Expression.Empty())
         {

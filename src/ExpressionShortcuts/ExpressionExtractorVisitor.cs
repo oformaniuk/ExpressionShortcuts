@@ -70,7 +70,7 @@ namespace Expressions.Shortcuts
             }
         }
 
-        private static Expression? ConvertToExpression(object value, Func<Expression, Expression>? visit = null)
+        private static Expression ConvertToExpression(object value, Func<Expression, Expression> visit = null)
         {
             if (value is ExpressionContainer expressionContainer) return expressionContainer.Expression;
             if (value is Expression expression) return visit?.Invoke(expression);

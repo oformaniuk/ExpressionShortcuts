@@ -1,5 +1,7 @@
+#nullable enable
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Bogus;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -25,6 +27,30 @@ namespace Expressions.Shortcuts.Tests
                 .Line(ExpressionShortcuts.Call(() => _mock.MethodWithReturn()));
 
             Expression.Lambda<Func<string>>(blockBuilder).Compile().Invoke();
+
+            _mock.Received(1).MethodWithReturn();
+        }
+        
+        [Fact]
+        public void FuncCallTest()
+        {
+            Func<IMock, string> func = m => m.MethodWithReturn();
+
+            var expected = _faker.Random.String();
+            _mock.MethodWithReturn().Returns(expected);
+            var mock = ExpressionShortcuts.Arg(_mock);
+            var data = ExpressionShortcuts.Var<IMock>();
+            var action = ExpressionShortcuts.Block()
+                .Parameter(data, mock)
+                .Line(ExpressionShortcuts.Call(() => func((IMock)data)))
+                .Lambda<Func<string>>()
+                .Compile();
+
+            _mock.DidNotReceive().MethodWithReturn();
+
+            var actual = action();
+            
+            Assert.Equal(expected, actual);
 
             _mock.Received(1).MethodWithReturn();
         }

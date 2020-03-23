@@ -6,10 +6,10 @@ namespace Expressions.Shortcuts
 {
     internal class ParameterReplacerVisitor : ExpressionVisitor
     {
-        private readonly ICollection<Expression?> _replacements;
+        private readonly ICollection<Expression> _replacements;
         private readonly bool _addIfMiss;
 
-        public ParameterReplacerVisitor(IEnumerable<Expression?> replacements, bool addIfMiss = false)
+        public ParameterReplacerVisitor(IEnumerable<Expression> replacements, bool addIfMiss = false)
         {
             _replacements = replacements.Where(o => o != null).ToList();
             _addIfMiss = addIfMiss;

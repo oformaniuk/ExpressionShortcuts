@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -60,7 +58,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="ParameterExpression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Var<T>(string? name = null)
+        public static ExpressionContainer<T> Var<T>(string name = null)
         {
             return new ExpressionContainer<T>(Expression.Variable(typeof(T), name ?? typeof(T).Name));
         }
@@ -72,7 +70,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="ParameterExpression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Parameter<T>(string? name = null)
+        public static ExpressionContainer<T> Parameter<T>(string name = null)
         {
             return new ExpressionContainer<T>(Expression.Parameter(typeof(T), name ?? typeof(T).Name));
         }
@@ -166,7 +164,7 @@ namespace Expressions.Shortcuts
         /// Provides fluent interface for <see cref="BlockExpression"/> creation
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BlockBuilder Block(Type? returnType = null)
+        public static BlockBuilder Block(Type returnType = null)
         {
             return new BlockBuilder(returnType);
         }
