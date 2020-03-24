@@ -5,7 +5,7 @@
         <TargetFrameworks>net452;netstandard1.3;netstandard2.0</TargetFrameworks>
         <RootNamespace>Expressions.Shortcuts</RootNamespace>
         <ProjectGuid>B056DA03-44B9-4903-8534-E8F14553C915</ProjectGuid>
-        <LangVersion>7.3</LangVersion>
+        <LangVersion>7</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>

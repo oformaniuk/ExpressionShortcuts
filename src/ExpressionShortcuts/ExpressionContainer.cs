@@ -71,9 +71,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// Used to trick C# compiler
         /// </summary>
-#pragma warning disable 8653
-        public static implicit operator T(ExpressionContainer<T> expressionContainer) => default;
-#pragma warning restore 8653
+        public static implicit operator T(ExpressionContainer<T> expressionContainer) => default(T);
 
         /// <summary>
         /// 
