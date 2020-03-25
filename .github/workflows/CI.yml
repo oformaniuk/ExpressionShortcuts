@@ -78,11 +78,11 @@ jobs:
         
       - name: pack binary
         working-directory: ./src
-        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.csproj -c Release /p:version=${{ env.VERSION }}.${{ github.run_number }}-beta
+        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.csproj -c Release /p:version=${{ env.VERSION }}.${{ github.run_number }}
         
       - name: pack code
         working-directory: ./src
-        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.Source.csproj /p:version=${{ env.VERSION }}.${{ github.run_number }}-beta
+        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.Source.csproj /p:version=${{ env.VERSION }}.${{ github.run_number }}
         
       - name: publish
         working-directory: ./src
