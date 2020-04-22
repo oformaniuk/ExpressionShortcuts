@@ -75,11 +75,7 @@ jobs:
         run: git fetch --depth 500
       - name: Determine version
         run: echo "::set-env name=VERSION::$(git describe --tags --abbrev=0)"    
-        
-      - name: pack binary
-        working-directory: ./src
-        run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.csproj -c Release /p:version=${{ env.VERSION }}.${{ github.run_number }}
-        
+          
       - name: pack code
         working-directory: ./src
         run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.Source.csproj /p:version=${{ env.VERSION }}.${{ github.run_number }}

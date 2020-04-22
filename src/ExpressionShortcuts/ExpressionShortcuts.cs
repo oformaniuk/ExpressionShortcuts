@@ -9,7 +9,7 @@ namespace Expressions.Shortcuts
     /// <summary>
     /// Stands for <see cref="Expression"/> shortcuts.
     /// </summary>
-    public static partial class ExpressionShortcuts
+    internal static partial class ExpressionShortcuts
     {
         /// <summary>
         /// Creates strongly typed representation of the <paramref name="expression"/>

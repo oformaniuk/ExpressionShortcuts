@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Expressions.Shortcuts
 {
-    public partial class TryCatchFinallyBuilder
+    internal partial class TryCatchFinallyBuilder
     {
         /// <summary>
         /// Adds <see langword="catch" /> statement catching all <see cref="Exception"/> types

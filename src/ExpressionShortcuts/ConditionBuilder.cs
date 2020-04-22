@@ -6,7 +6,7 @@ namespace Expressions.Shortcuts
     /// <summary>
     /// 
     /// </summary>
-    public class ConditionBuilder : ExpressionContainer
+    internal class ConditionBuilder : ExpressionContainer
     {
         private Expression _condition;
         private Expression _then;

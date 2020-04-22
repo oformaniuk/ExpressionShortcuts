@@ -8,7 +8,7 @@ namespace Expressions.Shortcuts
     /// <summary>
     /// 
     /// </summary>
-    public partial class TryCatchFinallyBuilder : ExpressionContainer
+    internal partial class TryCatchFinallyBuilder : ExpressionContainer
     {
         private readonly List<CatchBlock> _catchBlocks = new List<CatchBlock>();
         

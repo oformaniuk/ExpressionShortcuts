@@ -10,7 +10,7 @@ namespace Expressions.Shortcuts
     /// <summary>
     /// 
     /// </summary>
-    public static class ExpressionUtils
+    internal static class ExpressionUtils
     {
         /// <summary>
         /// Visits <paramref name="expressions"/> and replaces <see cref="ParameterExpression"/> by <paramref name="newValues"/> performing match by <see cref="Expression.Type"/>
