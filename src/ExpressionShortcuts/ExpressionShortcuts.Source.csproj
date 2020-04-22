@@ -9,7 +9,6 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <Configuration>Source</Configuration>
-        <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -43,7 +42,6 @@
         <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-        <PackageId>$(PackageId)</PackageId>
     </PropertyGroup>
     
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
