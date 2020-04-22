@@ -3,9 +3,9 @@
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
     <PropertyGroup>
-        <PackageId>ExpressionShortcuts.Source</PackageId>
+        <PackageId>ExpressionShortcuts</PackageId>
         <TargetFrameworks>net452;netstandard1.3;netstandard2.0</TargetFrameworks>
-        <Version>1.1.22</Version>
+        <Version>1.0.0</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <Configuration>Source</Configuration>
@@ -50,17 +50,17 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Compile Include="**\*.cs" Exclude="obj\**\*.*">
+        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*">
             <Pack>true</Pack>
             <Visible>false</Visible>
             <PackagePath>$(ContentTargetFolders)\cs\netstandard2.0\$(PackageId)\%(Identity)</PackagePath>
         </Compile>
-        <Compile Include="**\*.cs" Exclude="obj\**\*.*;netstandard2.0\**\*.cs">
+        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
             <Pack>true</Pack>
             <Visible>false</Visible>
             <PackagePath>$(ContentTargetFolders)\cs\netstandard1.3\$(PackageId)\%(Identity)</PackagePath>
         </Compile>
-        <Compile Include="**\*.cs" Exclude="obj\**\*.*;netstandard2.0\**\*.cs">
+        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
             <Pack>true</Pack>
             <Visible>false</Visible>
             <PackagePath>$(ContentTargetFolders)\cs\net452\$(PackageId)\%(Identity)</PackagePath>

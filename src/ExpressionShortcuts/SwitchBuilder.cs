@@ -11,7 +11,7 @@ namespace Expressions.Shortcuts
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SwitchBuilder<T> : ExpressionContainer
+    internal class SwitchBuilder<T> : ExpressionContainer
     {
         /// <summary>
         /// 
@@ -206,7 +206,7 @@ namespace Expressions.Shortcuts
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TR"></typeparam>
-    public class SwitchBuilder<T, TR> : SwitchBuilder<T>
+    internal class SwitchBuilder<T, TR> : SwitchBuilder<T>
     {
         internal SwitchBuilder(ExpressionContainer<T> value) : base(value)
         {

@@ -5,7 +5,7 @@ namespace Expressions.Shortcuts
     /// <summary>
     /// Wrapper around of <see cref="System.Linq.Expressions.Expression"/> to provide addition functionality
     /// </summary>
-    public class ExpressionContainer
+    internal class ExpressionContainer
     {
         /// <summary>
         /// 
@@ -66,7 +66,7 @@ namespace Expressions.Shortcuts
     /// </summary>
     /// <remarks>Used to trick C# compiler in cases like <see cref="ExpressionShortcuts.Call"/> in order to pass value to target method.</remarks>
     /// <typeparam name="T">Type of expected <see cref="Expression"/> result value.</typeparam>
-    public class ExpressionContainer<T> : ExpressionContainer
+    internal class ExpressionContainer<T> : ExpressionContainer
     {
         /// <summary>
         /// Used to trick C# compiler

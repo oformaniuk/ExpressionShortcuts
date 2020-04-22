@@ -8,7 +8,7 @@ namespace Expressions.Shortcuts
     /// <summary>
     /// Shortcut for <see cref="BlockExpression"/>
     /// </summary>
-    public class BlockBuilder: ExpressionContainer
+    internal class BlockBuilder: ExpressionContainer
     {
         private readonly Type _returnType;
         private readonly List<Expression> _expressions;

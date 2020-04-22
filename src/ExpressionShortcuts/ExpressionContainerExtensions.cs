@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Expressions.Shortcuts
 {
-    public static partial class ExpressionShortcuts
+    internal static partial class ExpressionShortcuts
     {
         /// <summary>
         /// Creates strongly typed representation of the <see cref="Expression.Property(System.Linq.Expressions.Expression,System.String)"/>
