@@ -9,6 +9,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <Configuration>Source</Configuration>
+        <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -17,9 +18,9 @@
         <Description>A set of APIs for to simplify work with System.Linq.Expressions</Description>
         <PackageIcon>images\icon.png</PackageIcon>
         <PackageId>ExpressionShortcuts</PackageId>
-        <PackageLicense>https://opensource.org/licenses/mit</PackageLicense>
+        <PackageLicenseUrl>https://github.com/zjklee/ExpressionShortcuts/blob/master/LICENSE</PackageLicenseUrl>
         <PackageProjectUrl>https://github.com/zjklee/ExpressionShortcuts</PackageProjectUrl>
-        <PackageTags>expression-tree;expressions</PackageTags>
+        <PackageTags>expression;tree;expression-tree;expressions</PackageTags>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/zjklee/ExpressionShortcuts</RepositoryUrl>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -42,7 +43,7 @@
         <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-        <PackageId>$(PackageId).Sources</PackageId>
+        <PackageId>$(PackageId)</PackageId>
     </PropertyGroup>
     
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
