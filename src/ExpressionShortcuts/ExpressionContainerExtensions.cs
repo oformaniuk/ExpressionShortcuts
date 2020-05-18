@@ -83,10 +83,8 @@ namespace Expressions.Shortcuts
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ExpressionContainer Using<T>(this ExpressionContainer<T> instance, Action<ExpressionContainer<T>, BlockBuilder> blockBody) where T : IDisposable
         {
-            var variable = Var<T>();
-            
             return Try()
-                .Body(block => blockBody(variable, block.Parameter(variable, instance)))
+                .Body(block => blockBody(instance, block))
                 .Finally(instance.Call(o => o.Dispose()));
         }
 
