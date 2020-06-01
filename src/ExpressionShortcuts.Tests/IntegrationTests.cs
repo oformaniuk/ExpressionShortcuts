@@ -161,7 +161,8 @@ namespace Expressions.Shortcuts.Tests
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(ExpressionShortcuts.Condition()
-                    .If(data.Property(o => o.Condition), data.Call(o => o.VoidMethodWithoutParameters()))
+                    .If(data.Property(o => o.Condition))
+                    .Then(data.Call(o => o.VoidMethodWithoutParameters()))
                     .Else(data.Call(o => o.VoidMethodWithParameter(o.String))))
                 .Lambda<Action>()
                 .Compile();

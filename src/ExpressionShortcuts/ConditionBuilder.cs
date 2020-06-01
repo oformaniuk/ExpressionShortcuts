@@ -20,12 +20,10 @@ namespace Expressions.Shortcuts
         /// Adds <see langword="if"/> block
         /// </summary>
         /// <param name="condition"></param>
-        /// <param name="then"></param>
         /// <returns></returns>
-        public ConditionBuilder If(Expression condition, Expression then)
+        public ConditionBuilder If(Expression condition)
         {
             _condition = condition;
-            _then = then;
 
             return this;
         }
@@ -34,15 +32,61 @@ namespace Expressions.Shortcuts
         /// Adds <see langword="if"/> block
         /// </summary>
         /// <param name="condition"></param>
-        /// <param name="then"></param>
         /// <returns></returns>
-        public ConditionBuilder If(ExpressionContainer<bool> condition, Action<BlockBuilder> then)
+        public ConditionBuilder If(ExpressionContainer<bool> condition)
         {
             _condition = condition;
+            
+            return this;
+        }
+
+        /// <summary>
+        /// Occurs in case <see cref="If(System.Linq.Expressions.Expression)"/> condition evaluated to <c>true</c>
+        /// </summary>
+        /// <param name="then"></param>
+        /// <returns></returns>
+        public ConditionBuilder Then(Expression then)
+        {
+            _then = then;
+
+            return this;
+        }
+        
+        /// <summary>
+        /// Occurs in case <see cref="If(System.Linq.Expressions.Expression)"/> condition evaluated to <c>true</c>
+        /// </summary>
+        /// <param name="then"></param>
+        /// <returns></returns>
+        public ConditionBuilder Then(ExpressionContainer then)
+        {
+            _then = then.Expression;
+
+            return this;
+        }
+        
+        /// <summary>
+        /// Occurs in case <see cref="If(System.Linq.Expressions.Expression)"/> condition evaluated to <c>true</c>
+        /// </summary>
+        /// <param name="then"></param>
+        /// <returns></returns>
+        public ConditionBuilder Then<T>(ExpressionContainer<T> then)
+        {
+            _then = then.Expression;
+
+            return this;
+        }
+        
+        /// <summary>
+        /// Occurs in case <see cref="If(System.Linq.Expressions.Expression)"/> condition evaluated to <c>true</c>
+        /// </summary>
+        /// <param name="then"></param>
+        /// <returns></returns>
+        public ConditionBuilder Then(Action<BlockBuilder> then)
+        {
             var block = new BlockBuilder(null);
             then(block);
             _then = block;
-            
+
             return this;
         }
 
@@ -63,6 +107,17 @@ namespace Expressions.Shortcuts
         /// <param name="then"></param>
         /// <returns></returns>
         public ConditionBuilder Else(ExpressionContainer then)
+        {
+            _else = then;
+            return this;
+        }
+        
+        /// <summary>
+        /// Adds <see langword="else"/> block
+        /// </summary>
+        /// <param name="then"></param>
+        /// <returns></returns>
+        public ConditionBuilder Else<T>(ExpressionContainer<T> then)
         {
             _else = then;
             return this;
