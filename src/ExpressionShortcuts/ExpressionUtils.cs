@@ -48,6 +48,27 @@ namespace Expressions.Shortcuts
 
             return ReplaceParameters(ExtractArgument(member), instance);
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static Expression ProcessFieldLambda(Expression instance, LambdaExpression propertyLambda)
+        {
+            var member = propertyLambda.Body as MemberExpression;
+            if (member == null) throw new ArgumentException($"Expression '{propertyLambda}' refers to a method, not a field.");
+
+            var propInfo = member.Member as FieldInfo;
+            if (propInfo == null) throw new ArgumentException($"Expression '{propertyLambda}' refers to a property, not a field.");
+
+            return ReplaceParameters(ExtractArgument(member), instance);
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static Expression ProcessMemberLambda(Expression instance, LambdaExpression propertyLambda)
+        {
+            var member = propertyLambda.Body as MemberExpression;
+            if (member == null) throw new ArgumentException($"Expression '{propertyLambda}' refers to a method, not a field.");
+            
+            return ReplaceParameters(ExtractArgument(member), instance);
+        }
 
         internal static Expression ProcessCallLambda(LambdaExpression propertyLambda, Expression instance = null)
         {

@@ -20,6 +20,34 @@ namespace Expressions.Shortcuts
         {
             return Property(instance.Expression, propertyAccessor);
         }
+        
+        /// <summary>
+        /// Creates strongly typed representation of the <see cref="Expression.Field(System.Linq.Expressions.Expression,System.String)"/>
+        /// </summary>
+        /// <param name="instance"/>
+        /// <param name="propertyAccessor">Property accessor expression</param>
+        /// <typeparam name="T">Expected type of resulting target <see cref="Expression"/></typeparam>
+        /// <typeparam name="TV">Expected type of resulting <see cref="MemberExpression"/></typeparam>
+        /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<TV> Field<T, TV>(this ExpressionContainer<T> instance, Expression<Func<T, TV>> propertyAccessor)
+        {
+            return Field(instance.Expression, propertyAccessor);
+        }
+        
+        /// <summary>
+        /// Creates strongly typed representation of the <see cref="Expression.PropertyOrField(System.Linq.Expressions.Expression,System.String)"/>
+        /// </summary>
+        /// <param name="instance"/>
+        /// <param name="propertyAccessor">Property accessor expression</param>
+        /// <typeparam name="T">Expected type of resulting target <see cref="Expression"/></typeparam>
+        /// <typeparam name="TV">Expected type of resulting <see cref="MemberExpression"/></typeparam>
+        /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<TV> Member<T, TV>(this ExpressionContainer<T> instance, Expression<Func<T, TV>> propertyAccessor)
+        {
+            return Member(instance.Expression, propertyAccessor);
+        }
 
         /// <summary>
         /// Creates <see cref="MethodCallExpression"/> or <see cref="InvocationExpression"/> based on <paramref name="invocationExpression"/>.

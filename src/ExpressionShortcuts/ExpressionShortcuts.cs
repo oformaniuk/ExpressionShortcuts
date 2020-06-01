@@ -102,6 +102,60 @@ namespace Expressions.Shortcuts
         {
             return Arg<TV>(Expression.Property(instance, propertyName));
         }
+        
+        /// <summary>
+        /// Creates strongly typed representation of the <see cref="Expression.Field(System.Linq.Expressions.Expression,System.String)"/>
+        /// </summary>
+        /// <param name="instance">Variable name. Corresponds to type name if omitted.</param>
+        /// <param name="propertyLambda">Property accessor expression</param>
+        /// <typeparam name="T">Expected type of resulting target <see cref="Expression"/></typeparam>
+        /// <typeparam name="TV">Expected type of resulting <see cref="MemberExpression"/></typeparam>
+        /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<TV> Field<T, TV>(Expression instance, Expression<Func<T, TV>> propertyLambda)
+        {
+            return Arg<TV>(ExpressionUtils.ProcessFieldLambda(instance, propertyLambda));
+        }
+        
+        /// <summary>
+        /// Creates strongly typed representation of the <see cref="Expression.Field(System.Linq.Expressions.Expression,System.String)"/>
+        /// </summary>
+        /// <param name="instance">Variable name. Corresponds to type name if omitted.</param>
+        /// <param name="propertyName"/>
+        /// <typeparam name="TV">Expected type of resulting <see cref="MemberExpression"/></typeparam>
+        /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<TV> Field<TV>(Expression instance, string propertyName)
+        {
+            return Arg<TV>(Expression.Field(instance, propertyName));
+        }
+        
+        /// <summary>
+        /// Creates strongly typed representation of the <see cref="Expression.PropertyOrField(System.Linq.Expressions.Expression,System.String)"/>
+        /// </summary>
+        /// <param name="instance">Variable name. Corresponds to type name if omitted.</param>
+        /// <param name="propertyLambda">Property accessor expression</param>
+        /// <typeparam name="T">Expected type of resulting target <see cref="Expression"/></typeparam>
+        /// <typeparam name="TV">Expected type of resulting <see cref="MemberExpression"/></typeparam>
+        /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<TV> Member<T, TV>(Expression instance, Expression<Func<T, TV>> propertyLambda)
+        {
+            return Arg<TV>(ExpressionUtils.ProcessMemberLambda(instance, propertyLambda));
+        }
+        
+        /// <summary>
+        /// Creates strongly typed representation of the <see cref="Expression.PropertyOrField(System.Linq.Expressions.Expression,System.String)"/>
+        /// </summary>
+        /// <param name="instance">Variable name. Corresponds to type name if omitted.</param>
+        /// <param name="propertyName"/>
+        /// <typeparam name="TV">Expected type of resulting <see cref="MemberExpression"/></typeparam>
+        /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<TV> Member<TV>(Expression instance, string propertyName)
+        {
+            return Arg<TV>(Expression.PropertyOrField(instance, propertyName));
+        }
 
         /// <summary>
         /// Creates strongly typed representation of the <see cref="Expression.NewArrayInit(System.Type,System.Collections.Generic.IEnumerable{System.Linq.Expressions.Expression})"/>

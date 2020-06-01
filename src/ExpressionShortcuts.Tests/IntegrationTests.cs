@@ -688,8 +688,156 @@ namespace Expressions.Shortcuts.Tests
             
             _ = _mock.Received(1).String;
         }
+        
+        [Fact]
+        public void FieldByNameTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(ExpressionShortcuts.Field<int>(variable.Expression, nameof(MockWithField.Value)))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void FieldViaExpressionTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                    .Parameter(out var variable, new MockWithField(expected))
+                    .Line(ExpressionShortcuts.Field<MockWithField, int>(variable.Expression, data => data.Value))
+                    .Lambda<Func<int>>()
+                    .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void FieldLambdaTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(variable.Field(o => o.Value))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void MemberByNameTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(ExpressionShortcuts.Member<int>(variable.Expression, nameof(MockWithField.Value)))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void MemberViaExpressionTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(ExpressionShortcuts.Member<MockWithField, int>(variable.Expression, data => data.Value))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void MemberLambdaTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(variable.Member(o => o.Value))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void MemberPropertyByNameTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(ExpressionShortcuts.Member<int>(variable.Expression, nameof(MockWithField.ValueProperty)))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void MemberPropertyViaExpressionTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(ExpressionShortcuts.Member<MockWithField, int>(variable.Expression, data => data.ValueProperty))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void MemberPropertyLambdaTest()
+        {
+            var expected = 42;
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Line(variable.Member(o => o.ValueProperty))
+                .Lambda<Func<int>>()
+                .Compile();
+
+            var actual = func();
+            
+            Assert.Equal(expected, actual);
+        }
     }
 
+    public class MockWithField
+    {
+        public readonly int Value;
+        
+        public int ValueProperty { get; }
+
+        public MockWithField(int value)
+        {
+            Value = value;
+            ValueProperty = value;
+        }
+    }
+    
     public interface IMock : IDisposable
     {
         string String { get; set; }
