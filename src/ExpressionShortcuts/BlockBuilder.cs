@@ -42,6 +42,66 @@ namespace Expressions.Shortcuts
                 
             throw new ArgumentException("is not ParameterExpression", nameof(expression));
         }
+        
+        /// <summary>
+        /// Adds parameter to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Parameter<T>(out ExpressionContainer<T> parameter)
+        {
+            var expression = Expression.Parameter(typeof(T));
+            parameter = ExpressionShortcuts.Arg<T>(expression);
+            return Parameter(expression);
+        }
+        
+        /// <summary>
+        /// Adds parameter to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Parameter<T>(string name, out ExpressionContainer<T> parameter)
+        {
+            var expression = Expression.Parameter(typeof(T), name);
+            parameter = ExpressionShortcuts.Arg<T>(expression);
+            return Parameter(expression);
+        }
+        
+        /// <summary>
+        /// Adds parameter to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Parameter<T>(out ExpressionContainer<T> parameter, ExpressionContainer<T> value)
+        {
+            var expression = Expression.Parameter(typeof(T));
+            parameter = ExpressionShortcuts.Arg<T>(expression);
+            return Parameter(parameter, value);
+        }
+        
+        /// <summary>
+        /// Adds parameter to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Parameter<T>(string name, out ExpressionContainer<T> parameter, ExpressionContainer<T> value)
+        {
+            var expression = Expression.Parameter(typeof(T), name);
+            parameter = ExpressionShortcuts.Arg<T>(expression);
+            return Parameter(parameter, value);
+        }
+        
+        /// <summary>
+        /// Adds parameter to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Parameter<T>(out ExpressionContainer<T> parameter, T value)
+        {
+            var expression = Expression.Parameter(typeof(T));
+            parameter = ExpressionShortcuts.Arg<T>(expression);
+            return Parameter(parameter, ExpressionShortcuts.Arg(value));
+        }
+        
+        /// <summary>
+        /// Adds parameter to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Parameter<T>(string name, out ExpressionContainer<T> parameter, T value)
+        {
+            var expression = Expression.Parameter(typeof(T), name);
+            parameter = ExpressionShortcuts.Arg<T>(expression);
+            return Parameter(parameter, ExpressionShortcuts.Arg(value));
+        }
 
         /// <summary>
         /// Adds parameter to <see cref="BlockExpression"/> with initial assignment
