@@ -207,6 +207,61 @@ namespace Expressions.Shortcuts.Tests
         }
         
         [Fact]
+        public void ConditionResultTest()
+        {
+            var expected = _faker.Random.String();
+            _mock.Condition.Returns(true);
+            _mock.MethodWithReturn().Returns(expected);
+            
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var data, _mock)
+                .Line(ExpressionShortcuts.Condition()
+                    .If(data.Property(o => o.Condition))
+                    .Then(data.Call(o => o.MethodWithReturn()))
+                    .Else(data.Call(o => o.MethodWithReturn())))
+                .Lambda<Func<string>>()
+                .Compile();
+
+            _mock.DidNotReceive().MethodWithReturn();
+            _ = _mock.DidNotReceiveWithAnyArgs().Condition;
+
+            var actual = func.Invoke();
+
+            _ = _mock.Received().Condition;
+            _mock.Received(1).MethodWithReturn();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public void ConditionResultWithTypeTest()
+        {
+            var expected = _faker.Random.String();
+            _mock.Condition.Returns(true);
+            _mock.MethodWithReturn().Returns(expected);
+            
+            var func = ExpressionShortcuts.Block()
+                .Parameter(out var data, _mock)
+                .Line(ExpressionShortcuts.Condition(typeof(string))
+                    .If(data.Property(o => o.Condition))
+                    .Then(data.Call(o => o.MethodWithReturn()))
+                    .Else(data.Call(o => o.MethodWithReturn()))
+                )
+                .Lambda<Func<string>>()
+                .Compile();
+
+            _mock.DidNotReceive().MethodWithReturn();
+            _ = _mock.DidNotReceiveWithAnyArgs().Condition;
+
+            var actual = func.Invoke();
+
+            _ = _mock.Received().Condition;
+            _mock.Received(1).MethodWithReturn();
+            
+            Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
         public void SwitchTest()
         {
             _mock.String.Returns(_faker.Random.String());

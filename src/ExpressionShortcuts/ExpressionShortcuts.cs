@@ -290,9 +290,9 @@ namespace Expressions.Shortcuts
         /// Creates <see langword="if"/> expression
         /// </summary>
         /// <returns></returns>
-        public static ConditionBuilder Condition()
+        public static ConditionBuilder Condition(Type resultType = null)
         {
-            return new ConditionBuilder();
+            return new ConditionBuilder(resultType);
         }
     }
 }

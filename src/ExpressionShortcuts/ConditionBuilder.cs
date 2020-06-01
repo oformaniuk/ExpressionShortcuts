@@ -8,12 +8,14 @@ namespace Expressions.Shortcuts
     /// </summary>
     internal class ConditionBuilder : ExpressionContainer
     {
+        private readonly Type _type;
         private Expression _condition;
         private Expression _then;
         private Expression _else;
-
-        internal ConditionBuilder() : base(Expression.Empty())
+        
+        internal ConditionBuilder(Type type) : base(Expression.Empty())
         {
+            _type = type;
         }
         
         /// <summary>
@@ -145,8 +147,10 @@ namespace Expressions.Shortcuts
                 if(_condition == null) throw new InvalidOperationException("`if` statement is not defined");
                 
                 return _else == null 
-                    ? Expression.IfThen(_condition, _then ?? Expression.Empty()) 
-                    : Expression.IfThenElse(_condition, _then ?? Expression.Empty(), _else);
+                    ? Expression.IfThen(_condition, _then)
+                    : _type == null
+                        ? Expression.Condition(_condition, _then, _else)
+                        : Expression.Condition(_condition, _then, _else, _type);
             }
         }
     }
