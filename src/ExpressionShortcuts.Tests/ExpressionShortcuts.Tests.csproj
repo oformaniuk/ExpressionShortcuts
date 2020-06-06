@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net452;netcoreapp1.1;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>netcoreapp1.1;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45;net451;net452</TargetFrameworks>
         <IsPackable>false</IsPackable>
         <RootNamespace>Expressions.Shortcuts.Tests</RootNamespace>
         <LangVersion>latest</LangVersion>

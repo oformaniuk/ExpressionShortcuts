@@ -4,7 +4,7 @@
 
     <PropertyGroup>
         <PackageId>ExpressionShortcuts</PackageId>
-        <TargetFrameworks>net452;netstandard1.3;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net45;net451;net452;netstandard1.3;netstandard2.0</TargetFrameworks>
         <Version>1.0.0</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
@@ -63,6 +63,16 @@
             <Pack>true</Pack>
             <Visible>false</Visible>
             <PackagePath>$(ContentTargetFolders)\cs\net452\$(PackageId)\%(Identity)</PackagePath>
+        </Compile>
+        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
+            <Pack>true</Pack>
+            <Visible>false</Visible>
+            <PackagePath>$(ContentTargetFolders)\cs\net451\$(PackageId)\%(Identity)</PackagePath>
+        </Compile>
+        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
+            <Pack>true</Pack>
+            <Visible>false</Visible>
+            <PackagePath>$(ContentTargetFolders)\cs\net45\$(PackageId)\%(Identity)</PackagePath>
         </Compile>
         
         <Content Include="build\**">

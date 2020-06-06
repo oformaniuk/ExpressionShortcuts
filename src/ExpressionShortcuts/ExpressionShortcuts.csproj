@@ -2,7 +2,8 @@
 
     <PropertyGroup>
         <DebugType>portable</DebugType>
-        <TargetFrameworks>net452;netstandard1.3;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45;net451;net452</TargetFrameworks>
         <RootNamespace>Expressions.Shortcuts</RootNamespace>
         <ProjectGuid>B056DA03-44B9-4903-8534-E8F14553C915</ProjectGuid>
         <LangVersion>7</LangVersion>
