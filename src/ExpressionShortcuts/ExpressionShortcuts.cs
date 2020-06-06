@@ -260,6 +260,7 @@ namespace Expressions.Shortcuts
         /// <param name="code"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ExpressionContainer<T> Code<T>(Func<T> code)
         {
             return Call(() => code());
@@ -270,6 +271,7 @@ namespace Expressions.Shortcuts
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ExpressionContainer Code(Action code)
         {
             return Call(() => code());
@@ -281,6 +283,7 @@ namespace Expressions.Shortcuts
         /// <param name="value"></param>
         /// <typeparam name="T">Type of variable</typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SwitchBuilder<T> Switch<T>(ExpressionContainer<T> value)
         {
             return new SwitchBuilder<T>(value);
@@ -290,6 +293,7 @@ namespace Expressions.Shortcuts
         /// Creates <see langword="if"/> expression
         /// </summary>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ConditionBuilder Condition(Type resultType = null)
         {
             return new ConditionBuilder(resultType);
