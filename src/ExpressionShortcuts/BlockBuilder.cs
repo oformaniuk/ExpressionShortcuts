@@ -166,6 +166,15 @@ namespace Expressions.Shortcuts
             _expressions.AddRange(e);
             return this;
         }
+        
+        /// <summary>
+        /// Adds multiple new "lines" to <see cref="BlockExpression"/>
+        /// </summary>
+        public BlockBuilder Lines(params Expression[] e)
+        {
+            _expressions.AddRange(e);
+            return this;
+        }
 
         /// <summary>
         /// Creates <see cref="InvocationExpression"/> out of current <see cref="BlockExpression"/>.
