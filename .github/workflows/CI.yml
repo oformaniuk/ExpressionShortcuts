@@ -43,7 +43,7 @@ jobs:
       with:
         dotnet-version: 3.1.102
     - name: Sonarscanner for dotnet
-      uses: Secbyte/dotnet-sonarscanner@v2.2
+      uses: Secbyte/dotnet-sonarscanner@v2.3
       with:
         buildCommand: dotnet build src/ExpressionShortcuts/ExpressionShortcuts.csproj -f netstandard2.0
         testCommand: dotnet test src/ExpressionShortcuts.Tests/ExpressionShortcuts.Tests.csproj -f netcoreapp3.1 --collect:"XPlat code coverage" --logger:trx --settings src/ExpressionShortcuts.Tests/coverlet.runsettings
