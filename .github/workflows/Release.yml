@@ -15,6 +15,10 @@ jobs:
         with:
           dotnet-version: 3.1.100
 
+      - name: build code
+        working-directory: ./src
+        run: dotnet build -c Release /p:version=${{ github.event.release.tag_name }}
+
       - name: pack code
         working-directory: ./src
         run: dotnet pack ./ExpressionShortcuts/ExpressionShortcuts.Source.csproj /p:version=${{ github.event.release.tag_name }}

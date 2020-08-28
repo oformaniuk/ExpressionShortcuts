@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp1.1;netcoreapp3.1</TargetFrameworks>
-        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45;net451;net452</TargetFrameworks>
+        <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net452</TargetFrameworks>
         <IsPackable>false</IsPackable>
         <RootNamespace>Expressions.Shortcuts.Tests</RootNamespace>
         <LangVersion>latest</LangVersion>
@@ -20,7 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ExpressionShortcuts\ExpressionShortcuts.csproj" />
+        <ProjectReference Include="..\ExpressionShortcuts\ExpressionShortcuts.csproj" />
+<!--        <PackageReference Include="ExpressionShortcuts" Version="1.5.0" />-->
     </ItemGroup>
 
     <ItemGroup>

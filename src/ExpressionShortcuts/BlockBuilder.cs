@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Microsoft.CSharp.Expressions;
 
 namespace Expressions.Shortcuts
 {
@@ -13,6 +15,7 @@ namespace Expressions.Shortcuts
         private readonly Type _returnType;
         private readonly List<Expression> _expressions;
         private readonly HashSet<ParameterExpression> _parameters;
+        private bool _optimize;
 
         internal BlockBuilder(Type returnType) : base(Expression.Empty())
         {
@@ -27,10 +30,16 @@ namespace Expressions.Shortcuts
         public IEnumerable<ParameterExpression> Parameters => _parameters;
         
         /// <inheritdoc />
-        public override Expression Expression => 
-            _returnType == null 
-                ? Expression.Block(_parameters, _expressions) 
-                : Expression.Block(_returnType, _parameters, _expressions);
+        public override Expression Expression
+        {
+            get
+            {
+                if (_returnType == null)
+                    return Expression.Block(_parameters, _expressions);
+                
+                return Expression.Block(_returnType, _parameters, _expressions);
+            }
+        }
 
         /// <summary>
         /// Adds parameter to <see cref="BlockExpression"/>
@@ -175,6 +184,12 @@ namespace Expressions.Shortcuts
             _expressions.AddRange(e);
             return this;
         }
+        
+        public BlockBuilder Optimize()
+        {
+            _optimize = true;
+            return this;
+        }
 
         /// <summary>
         /// Creates <see cref="InvocationExpression"/> out of current <see cref="BlockExpression"/>.
@@ -182,6 +197,7 @@ namespace Expressions.Shortcuts
         public ExpressionContainer<T> Invoke<T>(params ExpressionContainer[] parameters)
         {
             var lambda = Expression.Lambda(Expression, parameters.Select(o => (ParameterExpression) o.Expression));
+            if (_optimize) lambda = (LambdaExpression) lambda.Optimize();
             return ExpressionShortcuts.Arg<T>(Expression.Invoke(lambda));
         }
         
@@ -190,7 +206,19 @@ namespace Expressions.Shortcuts
         /// </summary>
         public Expression<T> Lambda<T>(params ExpressionContainer[] parameters) where T: class
         {
-            return Expression.Lambda<T>(Expression, parameters.Select(o => (ParameterExpression) o.Expression));
+            var lambda = Expression.Lambda<T>(Expression, parameters.Select(o => (ParameterExpression) o.Expression));
+            if (_optimize) lambda = (Expression<T>) lambda.Optimize();
+            return lambda;
+        }
+        
+        /// <summary>
+        /// Creates <see cref="InvocationExpression"/> out of current <see cref="BlockExpression"/>.
+        /// </summary>
+        public AsyncCSharpExpression<T> AsyncLambda<T>(params ExpressionContainer[] parameters) where T: class
+        {
+            var lambda = CSharpExpression.AsyncLambda<T>(Expression, parameters.Select(o => (ParameterExpression) o.Expression));
+            if (_optimize) lambda = (AsyncCSharpExpression<T>) lambda.Optimize();
+            return lambda;
         }
     }
 }

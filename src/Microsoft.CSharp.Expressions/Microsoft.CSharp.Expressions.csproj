@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net451;net452</TargetFrameworks>
+        <LangVersion>8</LangVersion>
+        <OutputPath>..\ExpressionShortcuts\lib</OutputPath>
+        <NoWarn>8625;8632;8602;8604;1591;1574;0419;1734;1572;1573</NoWarn>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\ExpressionShortcuts.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>Bart J.F. De Smet</Authors>
+        <Copyright>Copyright © Bart J.F. De Smet</Copyright>
+        <Description>A set of extensions System.Linq.Expressions</Description>
+        <PackageLicense>https://opensource.org/licenses/mit</PackageLicense>
+        <PackageProjectUrl>hhttps://github.com/bartdesmet/ExpressionFutures</PackageProjectUrl>
+        <PackageTags>expression-tree;expressions</PackageTags>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>hhttps://github.com/bartdesmet/ExpressionFutures</RepositoryUrl>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+        <Compile Remove="BclExtensions\**" />
+        <EmbeddedResource Remove="BclExtensions\**" />
+        <None Remove="BclExtensions\**" />
+    </ItemGroup>
+    
+    <ItemGroup Condition="'$(TargetFramework)' != 'net452' and '$(TargetFramework)' != 'net451'">
+        <Compile Remove="Microsoft\TupleElementNamesAttribute.cs" />
+        <Compile Remove="Microsoft\ValueTuple.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Update="Microsoft\CSharp\Expressions\DebuggerTypeProxies.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>DebuggerTypeProxies.cs</LastGenOutput>
+        </None>
+        <Compile Update="Microsoft\CSharp\Expressions\DebuggerTypeProxies.cs">
+            <DependentUpon>DebuggerTypeProxies.tt</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    
+</Project>

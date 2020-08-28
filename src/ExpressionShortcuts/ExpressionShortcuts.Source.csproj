@@ -4,7 +4,7 @@
 
     <PropertyGroup>
         <PackageId>ExpressionShortcuts</PackageId>
-        <TargetFrameworks>net45;net451;net452;netstandard1.3;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net451;net452;netstandard2.0;netstandard2.1</TargetFrameworks>
         <Version>1.0.0</Version>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
@@ -14,15 +14,16 @@
     <PropertyGroup>
         <Authors>Oleh Formaniuk</Authors>
         <Copyright>Copyright © 2020 Oleh Formaniuk</Copyright>
-        <Description>A set of APIs for to simplify work with System.Linq.Expressions</Description>
+        <Description>A set of APIs that help simplify work with System.Linq.Expressions</Description>
         <PackageIcon>images\icon.png</PackageIcon>
         <PackageId>ExpressionShortcuts</PackageId>
-        <PackageLicenseUrl>https://github.com/zjklee/ExpressionShortcuts/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicense>..\..\LICENSE</PackageLicense>
         <PackageProjectUrl>https://github.com/zjklee/ExpressionShortcuts</PackageProjectUrl>
         <PackageTags>expression;tree;expression-tree;expressions</PackageTags>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/zjklee/ExpressionShortcuts</RepositoryUrl>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DevelopmentDependency>true</DevelopmentDependency>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,8 +45,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     </PropertyGroup>
     
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-        <PackageReference Include="System.Reflection.TypeExtensions " Version="4.7.0" />
+    <ItemGroup>
+        <ProjectReference Include="..\Microsoft.CSharp.Expressions\Microsoft.CSharp.Expressions.csproj" PrivateAssets="All" />
     </ItemGroup>
     
     <ItemGroup>
@@ -54,10 +55,10 @@
             <Visible>false</Visible>
             <PackagePath>$(ContentTargetFolders)\cs\netstandard2.0\$(PackageId)\%(Identity)</PackagePath>
         </Compile>
-        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
+        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*">
             <Pack>true</Pack>
             <Visible>false</Visible>
-            <PackagePath>$(ContentTargetFolders)\cs\netstandard1.3\$(PackageId)\%(Identity)</PackagePath>
+            <PackagePath>$(ContentTargetFolders)\cs\netstandard2.1\$(PackageId)\%(Identity)</PackagePath>
         </Compile>
         <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
             <Pack>true</Pack>
@@ -69,11 +70,6 @@
             <Visible>false</Visible>
             <PackagePath>$(ContentTargetFolders)\cs\net451\$(PackageId)\%(Identity)</PackagePath>
         </Compile>
-        <Compile Include="**\*.cs" Exclude="Exclude\**\*.*;obj\**\*.*;netstandard2.0\**\*.cs">
-            <Pack>true</Pack>
-            <Visible>false</Visible>
-            <PackagePath>$(ContentTargetFolders)\cs\net45\$(PackageId)\%(Identity)</PackagePath>
-        </Compile>
         
         <Content Include="build\**">
             <Pack>true</Pack>
@@ -82,6 +78,14 @@
         <Content Include="buildMultiTargeting\**">
             <Pack>true</Pack>
             <PackagePath>buildMultiTargeting\</PackagePath>
+        </Content>
+        <Content Include="lib\**\*.dll">
+            <Pack>true</Pack>
+            <PackagePath>lib\</PackagePath>
+        </Content>
+        <Content Include="lib\**\*.xml">
+            <Pack>true</Pack>
+            <PackagePath>lib\</PackagePath>
         </Content>
     </ItemGroup>
 

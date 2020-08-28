@@ -3,7 +3,19 @@
     <ItemGroup>
         <Compile Update="$(MSBuildThisFileDirectory)..\contentFiles\**\*.*">
             <Visible>false</Visible>
-        </Compile>  
+        </Compile>
+        
+        <Content Condition="'$(IsPackable)' != 'false'" Include="$(MSBuildThisFileDirectory)..\lib\**\*.dll">
+            <Pack>true</Pack>
+            <PackagePath>lib\</PackagePath>
+            <Visible>false</Visible>
+        </Content>
+
+        <Content Condition="'$(IsPackable)' != 'false'" Include="$(MSBuildThisFileDirectory)..\lib\**\*.xml">
+            <Pack>true</Pack>
+            <PackagePath>lib\</PackagePath>
+            <Visible>false</Visible>
+        </Content>
     </ItemGroup>
     
 </Project>

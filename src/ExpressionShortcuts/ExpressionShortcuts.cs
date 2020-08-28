@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Microsoft.CSharp.Expressions;
 
 namespace Expressions.Shortcuts
 {
@@ -192,6 +194,18 @@ namespace Expressions.Shortcuts
         {
             return Arg<T>(ExpressionUtils.ProcessCallLambda(invocationExpression));
         }
+        
+        // /// <summary>
+        // /// Creates <see cref="MethodCallExpression"/> or <see cref="InvocationExpression"/> based on <paramref name="invocationExpression"/>.
+        // /// Parameters are resolved based on actual passed parameters.
+        // /// </summary>
+        // /// <param name="invocationExpression">Expression used to invoke the method.</param>
+        // /// <returns><see cref="ExpressionContainer{T}"/></returns>
+        // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        // public static ExpressionContainer<Task<T>> Call<T>(Expression<Func<Task<T>>> invocationExpression)
+        // {
+        //     return Arg<Task<T>>(ExpressionUtils.ProcessCallLambda(invocationExpression));
+        // }
 
         /// <summary>
         /// Creates <see cref="NewExpression"/>. Parameters for constructor and constructor itself are resolved based <paramref name="invocationExpression"/>.
@@ -212,6 +226,12 @@ namespace Expressions.Shortcuts
         public static ExpressionContainer<T> New<T>() where T: new()
         {
             return Arg<T>(Expression.New(typeof(T).GetConstructor(new Type[0])));
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<T> Await<T>(Expression<Func<Task<T>>> expression)
+        {
+            return Arg<T>(CSharpExpression.Await(ExpressionUtils.ProcessCallLambda(expression)));
         }
         
         /// <summary>

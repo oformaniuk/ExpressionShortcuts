@@ -2,10 +2,13 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using Bogus;
+using Microsoft.CSharp.Expressions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
+using static Expressions.Shortcuts.ExpressionShortcuts;
 
 namespace Expressions.Shortcuts.Tests
 {
@@ -23,8 +26,8 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void ClosureInCallTest()
         {
-            var blockBuilder = ExpressionShortcuts.Block()
-                .Line(ExpressionShortcuts.Call(() => _mock.MethodWithReturn()));
+            var blockBuilder = Block()
+                .Line(Call(() => _mock.MethodWithReturn()));
 
             Expression.Lambda<Func<string>>(blockBuilder).Compile().Invoke();
 
@@ -38,11 +41,11 @@ namespace Expressions.Shortcuts.Tests
 
             var expected = _faker.Random.String();
             _mock.MethodWithReturn().Returns(expected);
-            var mock = ExpressionShortcuts.Arg(_mock);
-            var data = ExpressionShortcuts.Var<IMock>();
-            var action = ExpressionShortcuts.Block()
+            var mock = Arg(_mock);
+            var data = Var<IMock>();
+            var action = Block()
                 .Parameter(data, mock)
-                .Line(ExpressionShortcuts.Call(() => func((IMock)data)))
+                .Line(Call(() => func((IMock)data)))
                 .Lambda<Func<string>>()
                 .Compile();
 
@@ -60,8 +63,8 @@ namespace Expressions.Shortcuts.Tests
         {
             _mock.MethodWithReturn().Returns(_faker.Random.String());
             
-            var blockBuilder = ExpressionShortcuts.Block()
-                .Line(ExpressionShortcuts.Call(() => _mock.MethodWithReturn().ToUpperInvariant()));
+            var blockBuilder = Block()
+                .Line(Call(() => _mock.MethodWithReturn().ToUpperInvariant()));
 
             Expression.Lambda<Func<string>>(blockBuilder).Compile().Invoke();
 
@@ -74,9 +77,9 @@ namespace Expressions.Shortcuts.Tests
             var expected = _faker.Random.String();
             _mock.MethodWithReturn().Returns(expected);
             
-            var blockBuilder = ExpressionShortcuts.Block()
-                .Line(ExpressionShortcuts.Call(() => 
-                    _mock.VoidMethodWithParameter(ExpressionShortcuts.Call(() => _mock.MethodWithReturn()))
+            var blockBuilder = Block()
+                .Line(Call(() => 
+                    _mock.VoidMethodWithParameter(Call(() => _mock.MethodWithReturn()))
                     )
                 );
 
@@ -94,11 +97,11 @@ namespace Expressions.Shortcuts.Tests
         {
             var expected = _faker.Random.String();
             _mock.String.Returns(expected);
-            var mock = ExpressionShortcuts.Parameter<IMock>();
+            var mock = Parameter<IMock>();
 
             Action action;
 
-            action = ExpressionShortcuts.Block()
+            action = Block()
                 .Parameter(mock)
                 .Line(mock.Assign(_mock))
                 .Line(mock.Call(o => o.VoidMethodWithParameter(o.String)))
@@ -135,8 +138,8 @@ namespace Expressions.Shortcuts.Tests
         {
             _mock.String.Returns(_faker.Random.String());
             
-            var data = ExpressionShortcuts.Parameter<IMock>();
-            var blockBuilder = ExpressionShortcuts.Block()
+            var data = Parameter<IMock>();
+            var blockBuilder = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(data.Property(o => o.String).Call(o => o.ToUpperInvariant()));
@@ -155,12 +158,12 @@ namespace Expressions.Shortcuts.Tests
             _mock.Condition.Returns(true);
             _mock.MethodWithReturn().Returns(_faker.Random.String());
             
-            var data = ExpressionShortcuts.Parameter<IMock>();
+            var data = Parameter<IMock>();
 
-            var action = ExpressionShortcuts.Block()
+            var action = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
-                .Line(ExpressionShortcuts.Condition()
+                .Line(Condition()
                     .If(data.Property(o => o.Condition))
                     .Then(data.Call(o => o.VoidMethodWithoutParameters()))
                     .Else(data.Call(o => o.VoidMethodWithParameter(o.String))))
@@ -185,9 +188,9 @@ namespace Expressions.Shortcuts.Tests
             _mock.Condition.Returns(false);
             _mock.MethodWithReturn().Returns(_faker.Random.String());
             
-            var action = ExpressionShortcuts.Block()
+            var action = Block()
                 .Parameter(out var data, _mock)
-                .Line(ExpressionShortcuts.Condition()
+                .Line(Condition()
                     .If(data.Property(o => o.Condition))
                     .Then(data.Call(o => o.VoidMethodWithoutParameters()))
                     .Else(data.Call(o => o.VoidMethodWithParameter(o.String))))
@@ -213,9 +216,9 @@ namespace Expressions.Shortcuts.Tests
             _mock.Condition.Returns(true);
             _mock.MethodWithReturn().Returns(expected);
             
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var data, _mock)
-                .Line(ExpressionShortcuts.Condition()
+                .Line(Condition()
                     .If(data.Property(o => o.Condition))
                     .Then(data.Call(o => o.MethodWithReturn()))
                     .Else(data.Call(o => o.MethodWithReturn())))
@@ -240,9 +243,9 @@ namespace Expressions.Shortcuts.Tests
             _mock.Condition.Returns(true);
             _mock.MethodWithReturn().Returns(expected);
             
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var data, _mock)
-                .Line(ExpressionShortcuts.Condition(typeof(string))
+                .Line(Condition(typeof(string))
                     .If(data.Property(o => o.Condition))
                     .Then(data.Call(o => o.MethodWithReturn()))
                     .Else(data.Call(o => o.MethodWithReturn()))
@@ -268,17 +271,17 @@ namespace Expressions.Shortcuts.Tests
             _mock.Int.Returns(42);
             _mock.MethodWithReturn().Returns(_faker.Random.String());
             
-            var data = ExpressionShortcuts.Parameter<IMock>();
+            var data = Parameter<IMock>();
             
-            var @switch = ExpressionShortcuts.Switch(data.Property(o => o.Int))
-                .Default(ExpressionShortcuts.Code(() => 0))
+            var @switch = Switch(data.Property(o => o.Int))
+                .Default(Code(() => 0))
                 .Case<int>((e, builder) =>
                 {
                     builder.Line(data.Call(o => o.VoidMethodWithParameter(e.Call(x => x.ToString()))));
                     builder.Lines(e.Call(o => o).Return());
-                }, ExpressionShortcuts.Arg(42));
+                }, Arg(42));
 
-            var action = ExpressionShortcuts.Block()
+            var action = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(@switch)
@@ -301,13 +304,13 @@ namespace Expressions.Shortcuts.Tests
         {
             var expected = _faker.Random.String();
             _mock.String.Returns(expected);
-            var property = ExpressionShortcuts.Arg<string>(Expression.Constant(_mock.String));
+            var property = Arg<string>(Expression.Constant(_mock.String));
 
-            var mock = ExpressionShortcuts.Parameter<IMock>();
-            var blockBuilder = ExpressionShortcuts.Block()
+            var mock = Parameter<IMock>();
+            var blockBuilder = Block()
                 .Parameter(mock)
                 .Line(mock.Assign(_mock))
-                .Line(ExpressionShortcuts.Call(() => StaticMethod((IMock) mock, property)));
+                .Line(Call(() => StaticMethod((IMock) mock, property)));
 
             Expression.Lambda<Action>(blockBuilder).Compile().Invoke();
 
@@ -325,8 +328,8 @@ namespace Expressions.Shortcuts.Tests
         {
             var expected = "newFistName";
             
-            var data = ExpressionShortcuts.Parameter<IMock>();
-            var blockBuilder = ExpressionShortcuts.Block()
+            var data = Parameter<IMock>();
+            var blockBuilder = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(data.Call(o => o.VoidMethodWithParameter(expected)));
@@ -339,8 +342,8 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void CallVoidMethodWithoutParametersTest()
         {
-            var data = ExpressionShortcuts.Parameter<IMock>();
-            var blockBuilder = ExpressionShortcuts.Block()
+            var data = Parameter<IMock>();
+            var blockBuilder = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(data.Call(o => o.VoidMethodWithoutParameters()));
@@ -353,8 +356,8 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void UsingTest()
         {
-            var parameter = ExpressionShortcuts.Parameter<IMock>();
-            ExpressionShortcuts.Block()
+            var parameter = Parameter<IMock>();
+            Expression<Action>? expression = (Expression<Action>?) Block()
                 .Parameter(parameter)
                 .Line(parameter.Assign(_mock))
                 .Line(parameter.Using((o, block) =>
@@ -362,8 +365,9 @@ namespace Expressions.Shortcuts.Tests
                     block.Line(o.Call(x => x.VoidMethodWithoutParameters()));
                 }))
                 .Lambda<Action>()
-                .Compile()
-                .Invoke();
+                .Optimize();
+            
+            expression!.Compile().Invoke();
             
             Received.InOrder(() =>
             {
@@ -378,18 +382,18 @@ namespace Expressions.Shortcuts.Tests
             var expected = "bbb";
             _mock.MethodWithReturn().Throws(new InvalidOperationException("aaa"));
             
-            var parameter = ExpressionShortcuts.Parameter<IMock>();
-            var actual = ExpressionShortcuts.Block()
+            var parameter = Parameter<IMock>();
+            var actual = Block()
                 .Parameter(parameter)
                 .Line(parameter.Assign(_mock))
-                .Line(ExpressionShortcuts.Try()
+                .Line(Try()
                     .Body(builder => builder.Line(parameter.Call(o => o.MethodWithReturn())))
                     .Catch<InvalidOperationException>((e, builder) =>
                     {
                         builder
                             .Line(parameter.Call(o => o.VoidMethodWithParameter(e.Property(x => x.Message))))
                             .Line(parameter.Call(o => o.Dispose()))
-                            .Line(ExpressionShortcuts.Code(() => expected));
+                            .Line(Code(() => expected));
                     })
                 )
                 .Lambda<Func<string>>()
@@ -412,9 +416,9 @@ namespace Expressions.Shortcuts.Tests
             var expected = new InvalidOperationException();
             _mock.MethodWithReturn().Throws(expected);
             
-            var mock = ExpressionShortcuts.Arg(_mock);
-            var parameter = ExpressionShortcuts.Parameter<IMock>();
-            var action = ExpressionShortcuts.Block()
+            var mock = Arg(_mock);
+            var parameter = Parameter<IMock>();
+            var action = Block()
                 .Parameter(parameter, mock)
                 .Line(parameter.Using((o, block) =>
                 {
@@ -438,9 +442,9 @@ namespace Expressions.Shortcuts.Tests
             var expected = _faker.Random.String();
             _mock.MethodWithReturn().Returns(expected);
 
-            var mock = ExpressionShortcuts.Arg(_mock);
-            var parameter = ExpressionShortcuts.Parameter<IMock>();
-            var actual = ExpressionShortcuts.Block()
+            var mock = Arg(_mock);
+            var parameter = Parameter<IMock>();
+            var actual = Block()
                 .Parameter(parameter, mock)
                 .Line(parameter.Using((o, block) =>
                 {
@@ -467,8 +471,8 @@ namespace Expressions.Shortcuts.Tests
             var expected = _faker.Random.String();
             _mock.MethodWithReturn().Returns(expected);
             
-            var parameter = ExpressionShortcuts.Parameter<IMock>();
-            var actual = ExpressionShortcuts.Block()
+            var parameter = Parameter<IMock>();
+            var actual = Block()
                 .Parameter(parameter)
                 .Line(parameter.Assign(_mock))
                 .Line(parameter.Using((o, block) =>
@@ -492,8 +496,8 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void IsWhenTypeMatchTest()
         {
-            var data = ExpressionShortcuts.Parameter<IMock>();
-            var blockBuilder = ExpressionShortcuts.Block()
+            var data = Parameter<IMock>();
+            var blockBuilder = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(data.Is<IMock>());
@@ -506,8 +510,8 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void IsWhenTypeDoesNotMatchTest()
         {
-            var data = ExpressionShortcuts.Parameter<IMock>();
-            var blockBuilder = ExpressionShortcuts.Block()
+            var data = Parameter<IMock>();
+            var blockBuilder = Block()
                 .Parameter(data)
                 .Line(data.Assign(_mock))
                 .Line(data.Is<string>());
@@ -520,9 +524,9 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void NewByTypeTest()
         {
-            var data = ExpressionShortcuts.Parameter<object>();
-            var blockBuilder = ExpressionShortcuts.Block()
-                .Parameter(data, ExpressionShortcuts.New<object>());
+            var data = Parameter<object>();
+            var blockBuilder = Block()
+                .Parameter(data, New<object>());
 
             var result = Expression.Lambda<Func<object>>(blockBuilder).Compile().Invoke();
             
@@ -532,9 +536,9 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void NewByExpressionTest()
         {
-            var data = ExpressionShortcuts.Parameter<string>();
-            var blockBuilder = ExpressionShortcuts.Block()
-                .Parameter(data, ExpressionShortcuts.New(() => new string('a', 3)));
+            var data = Parameter<string>();
+            var blockBuilder = Block()
+                .Parameter(data, New(() => new string('a', 3)));
 
             var result = Expression.Lambda<Func<string>>(blockBuilder).Compile().Invoke();
             
@@ -544,10 +548,10 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void ExternalArgPropertyTest()
         {
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            var blockBuilder = ExpressionShortcuts.Block()
+            var blockBuilder = Block()
                 .Parameter(variable, arg)
                 .Line(variable.Property(o => o.String));
 
@@ -563,10 +567,10 @@ namespace Expressions.Shortcuts.Tests
             _mock.Self.Returns(_mock);
             _mock.String.Returns(expected);
             
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            var actual = ExpressionShortcuts.Block()
+            var actual = Block()
                 .Parameter(variable, arg)
                 .Line(variable.Property(o => o.Self.Self.Self.String))
                 .Lambda<Func<string>>()
@@ -584,10 +588,10 @@ namespace Expressions.Shortcuts.Tests
         {
             _mock.Self.Returns(_mock);
             
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            ExpressionShortcuts.Block()
+            Block()
                 .Parameter(variable, arg)
                 .Line(variable.Call(o => o.Self.Self.Self.MethodWithReturn()))
                 .Lambda<Func<string>>()
@@ -604,10 +608,10 @@ namespace Expressions.Shortcuts.Tests
             _mock.Self.Returns(_mock);
             const int count = 10;
             
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            ExpressionShortcuts.Block()
+            Block()
                 .Parameter(variable, arg)
                 .Line(variable.Code(o =>
                 {
@@ -633,12 +637,12 @@ namespace Expressions.Shortcuts.Tests
             _mock.Self.Returns(_mock);
             const int count = 10;
             
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            ExpressionShortcuts.Block()
+            Block()
                 .Parameter(variable, arg)
-                .Line(ExpressionShortcuts.Code(() =>
+                .Line(Code(() =>
                 {
                     var local = _mock;
                     for (var i = 0; i < count; i++)
@@ -662,10 +666,10 @@ namespace Expressions.Shortcuts.Tests
             _mock.Self.Returns(_mock);
             const int count = 10;
             
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            ExpressionShortcuts.Block()
+            Block()
                 .Parameter(variable, arg)
                 .Line(variable.Code(o =>
                 {
@@ -691,12 +695,12 @@ namespace Expressions.Shortcuts.Tests
             _mock.Self.Returns(_mock);
             const int count = 10;
             
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            ExpressionShortcuts.Block()
+            Block()
                 .Parameter(variable, arg)
-                .Line(ExpressionShortcuts.Code(() =>
+                .Line(Code(() =>
                 {
                     var local = _mock;
                     for (var i = 0; i < count; i++)
@@ -717,12 +721,12 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void PropertyByNameTest()
         {
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            var blockBuilder = ExpressionShortcuts.Block()
+            var blockBuilder = Block()
                 .Parameter(variable, arg)
-                .Line(ExpressionShortcuts.Property<string>(variable.Expression, nameof(IMock.String)));
+                .Line(Property<string>(variable.Expression, nameof(IMock.String)));
 
             Expression.Lambda<Func<string>>(blockBuilder).Compile().Invoke();
             
@@ -732,12 +736,12 @@ namespace Expressions.Shortcuts.Tests
         [Fact]
         public void PropertyViaExpressionTest()
         {
-            var arg = ExpressionShortcuts.Arg(_mock);
-            var variable = ExpressionShortcuts.Var<IMock>();
+            var arg = Arg(_mock);
+            var variable = Var<IMock>();
             
-            var blockBuilder = ExpressionShortcuts.Block()
+            var blockBuilder = Block()
                 .Parameter(variable, arg)
-                .Line(ExpressionShortcuts.Property<IMock, string>(variable.Expression, data => data.String));
+                .Line(Property<IMock, string>(variable.Expression, data => data.String));
 
             Expression.Lambda<Func<string>>(blockBuilder).Compile().Invoke();
             
@@ -748,9 +752,9 @@ namespace Expressions.Shortcuts.Tests
         public void FieldByNameTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
-                .Line(ExpressionShortcuts.Field<int>(variable.Expression, nameof(MockWithField.Value)))
+                .Line(Field<int>(variable.Expression, nameof(MockWithField.Value)))
                 .Lambda<Func<int>>()
                 .Compile();
 
@@ -763,9 +767,9 @@ namespace Expressions.Shortcuts.Tests
         public void FieldViaExpressionTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                     .Parameter(out var variable, new MockWithField(expected))
-                    .Line(ExpressionShortcuts.Field<MockWithField, int>(variable.Expression, data => data.Value))
+                    .Line(Field<MockWithField, int>(variable.Expression, data => data.Value))
                     .Lambda<Func<int>>()
                     .Compile();
 
@@ -778,7 +782,7 @@ namespace Expressions.Shortcuts.Tests
         public void FieldLambdaTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
                 .Line(variable.Field(o => o.Value))
                 .Lambda<Func<int>>()
@@ -793,9 +797,9 @@ namespace Expressions.Shortcuts.Tests
         public void MemberByNameTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
-                .Line(ExpressionShortcuts.Member<int>(variable.Expression, nameof(MockWithField.Value)))
+                .Line(Member<int>(variable.Expression, nameof(MockWithField.Value)))
                 .Lambda<Func<int>>()
                 .Compile();
 
@@ -808,9 +812,9 @@ namespace Expressions.Shortcuts.Tests
         public void MemberViaExpressionTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
-                .Line(ExpressionShortcuts.Member<MockWithField, int>(variable.Expression, data => data.Value))
+                .Line(Member<MockWithField, int>(variable.Expression, data => data.Value))
                 .Lambda<Func<int>>()
                 .Compile();
 
@@ -823,7 +827,7 @@ namespace Expressions.Shortcuts.Tests
         public void MemberLambdaTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
                 .Line(variable.Member(o => o.Value))
                 .Lambda<Func<int>>()
@@ -838,9 +842,9 @@ namespace Expressions.Shortcuts.Tests
         public void MemberPropertyByNameTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
-                .Line(ExpressionShortcuts.Member<int>(variable.Expression, nameof(MockWithField.ValueProperty)))
+                .Line(Member<int>(variable.Expression, nameof(MockWithField.ValueProperty)))
                 .Lambda<Func<int>>()
                 .Compile();
 
@@ -853,9 +857,9 @@ namespace Expressions.Shortcuts.Tests
         public void MemberPropertyViaExpressionTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
-                .Line(ExpressionShortcuts.Member<MockWithField, int>(variable.Expression, data => data.ValueProperty))
+                .Line(Member<MockWithField, int>(variable.Expression, data => data.ValueProperty))
                 .Lambda<Func<int>>()
                 .Compile();
 
@@ -868,7 +872,7 @@ namespace Expressions.Shortcuts.Tests
         public void MemberPropertyLambdaTest()
         {
             var expected = 42;
-            var func = ExpressionShortcuts.Block()
+            var func = Block()
                 .Parameter(out var variable, new MockWithField(expected))
                 .Line(variable.Member(o => o.ValueProperty))
                 .Lambda<Func<int>>()
@@ -877,6 +881,38 @@ namespace Expressions.Shortcuts.Tests
             var actual = func();
             
             Assert.Equal(expected, actual);
+        }
+        
+        [Fact]
+        public async Task TestAsync()
+        {
+            var expected = 42;
+            var func = Block()
+                .Optimize()
+                .Parameter(out var variable, new MockWithField(expected))
+                .Parameter<int>(out var temp)
+                .Parameter<int>(out var temp2)
+                .Line(temp.Assign(variable.Member(o => o.ValueProperty).Call(o => CallAsync(o)).Await()))
+                .Line(temp2.Assign(Await(() => GetValueAsync())))
+                .Line(Call(() => (int)temp + (int)temp2))
+                .AsyncLambda<Func<Task<int>>>()
+                .Compile();
+
+            var actual = await func();
+            
+            Assert.Equal(expected * 2, actual);
+        }
+
+        private static async Task<int> CallAsync(int value)
+        {
+            await Task.Delay(5).ConfigureAwait(false);
+            return value;
+        }
+        
+        private static async Task<int> GetValueAsync()
+        {
+            await Task.Delay(5).ConfigureAwait(false);
+            return 42;
         }
     }
 

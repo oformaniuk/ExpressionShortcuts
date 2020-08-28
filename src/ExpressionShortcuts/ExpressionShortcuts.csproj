@@ -2,11 +2,13 @@
 
     <PropertyGroup>
         <DebugType>portable</DebugType>
-        <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
-        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45;net451;net452</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net451;net452</TargetFrameworks>
         <RootNamespace>Expressions.Shortcuts</RootNamespace>
         <ProjectGuid>B056DA03-44B9-4903-8534-E8F14553C915</ProjectGuid>
         <LangVersion>7</LangVersion>
+        <Configurations>Debug;Release;Source</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -38,18 +40,18 @@
         </Content>
     </ItemGroup>
     
-    <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-        <DefineConstants>$(DefineConstants);netstandard;netstandard1_3</DefineConstants>
-    </PropertyGroup>
-    
     <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
         <DefineConstants>$(DefineConstants);netstandard</DefineConstants>
     </PropertyGroup>
-    
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-        <PackageReference Include="System.Reflection.TypeExtensions " Version="4.7.0" />
-    </ItemGroup>
 
+    <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+        <DefineConstants>$(DefineConstants);netstandard</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Source' ">
+      <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
+    </PropertyGroup>
+    
     <ItemGroup>
         <Compile Remove="netstandard2.0\**" />
         <Compile Remove="build\**" />
@@ -57,7 +59,11 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <Compile Include="$(TargetFramework)\**" />
+        <Compile Include="netstandard2.0\**" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+        <Compile Include="netstandard2.0\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -68,6 +74,10 @@
     <ItemGroup>
       <None Remove="build\**" />
       <None Remove="buildMultiTargeting\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Microsoft.CSharp.Expressions\Microsoft.CSharp.Expressions.csproj" />
     </ItemGroup>
     
 </Project>

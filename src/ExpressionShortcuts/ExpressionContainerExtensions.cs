@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Microsoft.CSharp.Expressions;
 
 namespace Expressions.Shortcuts
 {
     internal static partial class ExpressionShortcuts
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ExpressionContainer<T> Await<T>(this ExpressionContainer<Task<T>> instance)
+        {
+            return Arg<T>(CSharpExpression.Await(instance));
+        }
+        
         /// <summary>
         /// Creates strongly typed representation of the <see cref="Expression.Property(System.Linq.Expressions.Expression,System.String)"/>
         /// </summary>
