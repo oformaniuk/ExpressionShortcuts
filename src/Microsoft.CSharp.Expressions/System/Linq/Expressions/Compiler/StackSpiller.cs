@@ -167,26 +167,6 @@ namespace System.Linq.Expressions.Compiler
             return result;
         }
 
-//         // DynamicExpression
-//         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "stack")]
-//         private Result RewriteDynamicExpression(Expression expr, Stack stack)
-//         {
-//             var node = (IDynamicExpression)expr;
-//
-//             // CallSite is on the stack
-//             ChildRewriter cr = new ChildRewriter(this, Stack.NonEmpty, node.ArgumentCount);
-//             cr.AddArguments(node);
-//             if (cr.Action == RewriteAction.SpillStack)
-//             {
-// #if LINQ
-//                 RequireNoRefArgs(node.DelegateType.GetMethod("Invoke"));
-// #else
-//                 MarkRefArgs(cr, node.DelegateType.GetMethod("Invoke"), 0);
-// #endif
-//             }
-//             return cr.Finish(cr.Rewrite ? node.Rewrite(cr[0, -1]) : expr);
-//         }
-
         private Result RewriteIndexAssignment(BinaryExpression node, Stack stack)
         {
             IndexExpression index = (IndexExpression)node.Left;
@@ -381,15 +361,15 @@ namespace System.Linq.Expressions.Compiler
 #endif
             }
 
-            // if (cr.Rewrite)
-            // {
-            //     return cr.Finish(
-            //         CreateAssignBinaryExpression(
-            //             MemberExpressionStubs.Make(cr[0], lvalue.Member),
-            //             cr[1]
-            //         )
-            //     );
-            // }
+            if (cr.Rewrite)
+            {
+                return cr.Finish(
+                    CreateAssignBinaryExpression(
+                        Expression.MakeMemberAccess(cr[0], lvalue.Member),
+                        cr[1]
+                    )
+                );
+            }
             return new Result(RewriteAction.None, node);
         }
 
@@ -423,21 +403,21 @@ namespace System.Linq.Expressions.Compiler
 
             cr.Add(node.Expression);
 
-//             if (cr.Rewrite)
-//             {
-//                 if (cr.Action == RewriteAction.SpillStack && node.Member is PropertyInfo)
-//                 {
-//                     // Only need to validate propreties because reading a field
-//                     // is always side-effect free.
-// #if LINQ
-//                     RequireNotRefInstance(node.Expression);
-// #else
-//                     MarkRefInstance(cr, node.Expression);
-// #endif
-//                 }
-//
-//                 expr = MemberExpressionStubs.Make(cr[0], node.Member);
-//             }
+            if (cr.Rewrite)
+            {
+                if (cr.Action == RewriteAction.SpillStack && node.Member is PropertyInfo)
+                {
+                    // Only need to validate propreties because reading a field
+                    // is always side-effect free.
+#if LINQ
+                    RequireNotRefInstance(node.Expression);
+#else
+                    MarkRefInstance(cr, node.Expression);
+#endif
+                }
+
+                expr = Expression.MakeMemberAccess(cr[0], node.Member);
+            }
 
             return cr.Finish(expr);
         }
@@ -583,14 +563,14 @@ namespace System.Linq.Expressions.Compiler
             // rest of arguments have non-empty stack (delegate instance on the stack)
             cr.Add(node.Arguments);
 
-//             if (cr.Action == RewriteAction.SpillStack)
-//             {
-// #if LINQ
-//                 RequireNoRefArgs(ExpressionStubs.GetInvokeMethod(node.Expression));
-// #else
-//                 MarkRefArgs(cr, ExpressionStubs.GetInvokeMethod(node.Expression), 1);
-// #endif
-//             }
+            if (cr.Action == RewriteAction.SpillStack)
+            {
+#if LINQ
+                RequireNoRefArgs(ExpressionStubs.GetInvokeMethod(node.Expression));
+#else
+                MarkRefArgs(cr, node.Expression.Type.GetInvokeMethod(), 1);
+#endif
+            }
 
             return cr.Finish(cr.Rewrite ? node.Rewrite(cr[0], cr[1, -1]) : expr);
         }
