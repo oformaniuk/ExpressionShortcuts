@@ -192,5 +192,13 @@ namespace Expressions.Shortcuts
         {
             return Expression.Lambda<T>(Expression, parameters.Select(o => (ParameterExpression) o.Expression));
         }
+
+        /// <summary>
+        /// Creates <see cref="InvocationExpression"/> out of current <see cref="BlockExpression"/>.
+        /// </summary>
+        public Expression<T> Lambda<T>(IEnumerable<ParameterExpression> parameters) where T : class
+        {
+            return Expression.Lambda<T>(Expression, parameters);
+        }
     }
 }
