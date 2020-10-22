@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 
 namespace Expressions.Shortcuts
 {
@@ -33,6 +34,12 @@ namespace Expressions.Shortcuts
         public ExpressionContainer<bool> Is<TV>() => new ExpressionContainer<bool>(Expression.TypeIs(Expression, typeof(TV)));
         
         /// <summary>
+        /// Creates <see cref="TypeBinaryExpression"/> from current <see cref="Expression"/>
+        /// </summary>
+        /// <returns></returns>
+        public ExpressionContainer<bool> Is(Type type) => new ExpressionContainer<bool>(Expression.TypeIs(Expression, type));
+        
+        /// <summary>
         /// Creates a <see cref="T:System.Linq.Expressions.UnaryExpression" /> that represents an explicit reference or boxing conversion where <see langword="null" /> is supplied if the conversion fails.
         /// </summary>
         /// <typeparam name="TV">A <see cref="T:System.Type" /> to set the <see cref="P:System.Linq.Expressions.Expression.Type" /> property equal to.</typeparam>
@@ -40,11 +47,25 @@ namespace Expressions.Shortcuts
         public ExpressionContainer<TV> As<TV>() => new ExpressionContainer<TV>(Expression.TypeAs(Expression, typeof(TV)));
         
         /// <summary>
+        /// Creates a <see cref="T:System.Linq.Expressions.UnaryExpression" /> that represents an explicit reference or boxing conversion where <see langword="null" /> is supplied if the conversion fails.
+        /// </summary>
+        /// <param name="type">A <see cref="T:System.Type" /> to set the <see cref="P:System.Linq.Expressions.Expression.Type" /> property equal to.</param>
+        /// <returns></returns>
+        public UnaryExpression As(Type type) => Expression.TypeAs(Expression, type);
+        
+        /// <summary>
         /// Creates a <see cref="T:System.Linq.Expressions.UnaryExpression" /> that represents a type conversion operation.
         /// </summary>
         /// <typeparam name="TV">A <see cref="T:System.Type" /> to set the <see cref="P:System.Linq.Expressions.Expression.Type" /> property equal to.</typeparam>
         /// <returns></returns>
         public ExpressionContainer<TV> Cast<TV>() => new ExpressionContainer<TV>(Expression.Convert(Expression, typeof(TV)));
+        
+        /// <summary>
+        /// Creates a <see cref="T:System.Linq.Expressions.UnaryExpression" /> that represents a type conversion operation.
+        /// </summary>
+        /// <param name="type">A <see cref="T:System.Type" /> to set the <see cref="P:System.Linq.Expressions.Expression.Type" /> property equal to.</param>
+        /// <returns></returns>
+        public UnaryExpression Cast(Type type) => Expression.Convert(Expression, type);
         
         /// <summary>
         /// 
@@ -71,7 +92,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// Used to trick C# compiler
         /// </summary>
-        public static implicit operator T(ExpressionContainer<T> expressionContainer) => default(T);
+        public static implicit operator T(ExpressionContainer<T> _0) => default(T);
 
         /// <summary>
         /// 
