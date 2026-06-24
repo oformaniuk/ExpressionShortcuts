@@ -2,11 +2,11 @@
 
     <PropertyGroup>
         <DebugType>portable</DebugType>
-        <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>netstandard1.3;netstandard2.0;netstandard2.1</TargetFrameworks>
         <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net45;net451;net452</TargetFrameworks>
         <RootNamespace>Expressions.Shortcuts</RootNamespace>
         <ProjectGuid>B056DA03-44B9-4903-8534-E8F14553C915</ProjectGuid>
-        <LangVersion>7</LangVersion>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -58,6 +58,11 @@
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
         <Compile Include="$(TargetFramework)\**" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+        <Compile Include="netstandard2.0\**" />
+        <Compile Remove="before-netstandard2.1\**" />
     </ItemGroup>
 
     <ItemGroup>

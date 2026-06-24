@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,8 +13,8 @@ namespace Expressions.Shortcuts
     {
         private readonly List<CatchBlock> _catchBlocks = new List<CatchBlock>();
         
-        private Expression _finallyBody;
-        private Expression _body;
+        private Expression? _finallyBody;
+        private Expression? _body;
 
         internal TryCatchFinallyBuilder() : base(Expression.Empty())
         {
@@ -116,6 +117,8 @@ namespace Expressions.Shortcuts
         {
             get
             {
+                if(_body == null) throw new InvalidOperationException("`body` statement is not defined");
+
                 if (_finallyBody != null)
                 {
                     return _catchBlocks.Any() 

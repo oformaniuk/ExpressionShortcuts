@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,16 +16,16 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// Visits <paramref name="expressions"/> and replaces <see cref="ParameterExpression"/> by <paramref name="newValues"/> performing match by <see cref="Expression.Type"/>
         /// </summary>
-        internal static IEnumerable<Expression> ReplaceParameters(IEnumerable<Expression> expressions, IList<Expression> newValues)
+        internal static IEnumerable<Expression> ReplaceParameters(IEnumerable<Expression?> expressions, IList<Expression> newValues)
         {
-            return newValues.Count != 0 
+            return (newValues.Count != 0 
                 ? PerformReplacement() 
-                : expressions;
+                : expressions)!;
 
             IEnumerable<Expression> PerformReplacement()
             {
                 var visitor = new ParameterReplacerVisitor(newValues);
-                return expressions.Where(o => o != null).Select(expression => visitor.Visit(expression));
+                return expressions.Where(o => o != null).Select(expression => visitor.Visit(expression!));
             }
         }
         
@@ -32,10 +33,10 @@ namespace Expressions.Shortcuts
         /// Visits <paramref name="expression"/> and replaces <see cref="ParameterExpression"/> by <paramref name="newValues"/> performing match by <see cref="Expression.Type"/>
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Expression ReplaceParameters(Expression expression, params Expression[] newValues)
+        internal static Expression ReplaceParameters(Expression expression, params Expression?[] newValues)
         {
             var visitor = new ParameterReplacerVisitor(newValues);
-            return visitor.Visit(expression);
+            return visitor.Visit(expression)!;
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -72,17 +73,17 @@ namespace Expressions.Shortcuts
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static Expression ProcessCallLambda(LambdaExpression propertyLambda, Expression instance = null)
+        internal static Expression ProcessCallLambda(LambdaExpression propertyLambda, Expression? instance = null)
         {
             return ProcessCall(propertyLambda.Body, instance);
         }
         
-        internal static Expression ProcessCall(Expression propertyLambda, Expression instance = null)
+        internal static Expression ProcessCall(Expression propertyLambda, Expression? instance = null)
         {
             switch (propertyLambda)
             {
                 case NewExpression newExpression:
-                    return Expression.New(newExpression.Constructor, ExtractArguments(newExpression.Arguments));
+                    return newExpression.Update(ExtractArguments(newExpression.Arguments));
 
                 case MethodCallExpression member:
                     var methodInfo = member.Method;
@@ -91,7 +92,7 @@ namespace Expressions.Shortcuts
                     IEnumerable<Expression> methodCallArguments = member.Arguments;
                     methodCallArguments = ReplaceParameters(methodCallArguments, parameters).Select(ExtractArgument);
                     var memberObject = methodInfo.IsStatic 
-                        ? null : Expression.Convert(instance, methodInfo.DeclaringType);
+                        ? null : Expression.Convert(instance!, methodInfo.DeclaringType!);
 
                     return Expression.Call(memberObject, methodInfo, methodCallArguments);
 

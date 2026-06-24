@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq.Expressions;
 
 namespace Expressions.Shortcuts
@@ -12,7 +13,7 @@ namespace Expressions.Shortcuts
         /// <param name="when"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public TryCatchFinallyBuilder Catch<T>(Action<ExpressionContainer<T>, BlockBuilder> @catch, Func<ExpressionContainer<T>, ExpressionContainer<bool>> when) where T: Exception
+        public TryCatchFinallyBuilder Catch<T>(Action<ExpressionContainer<T>, BlockBuilder> @catch, Func<ExpressionContainer<T>, ExpressionContainer<bool>>? when) where T: Exception
         {
             var exception = ExpressionShortcuts.Var<T>();
             var body = ExpressionShortcuts.Block();
@@ -33,7 +34,7 @@ namespace Expressions.Shortcuts
         /// <param name="when"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public TryCatchFinallyBuilder Catch<T>(Func<ExpressionContainer<T>, Expression> @catch, Func<ExpressionContainer<T>, ExpressionContainer<bool>> when) where T: Exception
+        public TryCatchFinallyBuilder Catch<T>(Func<ExpressionContainer<T>, Expression> @catch, Func<ExpressionContainer<T>, ExpressionContainer<bool>>? when) where T: Exception
         {
             var exception = ExpressionShortcuts.Var<T>();
             var body = @catch(exception);
