@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq.Expressions;
 
 namespace Expressions.Shortcuts
@@ -92,7 +93,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// Used to trick C# compiler
         /// </summary>
-        public static implicit operator T(ExpressionContainer<T> _0) => default(T);
+        public static implicit operator T(ExpressionContainer<T> _0) => default(T)!;
 
         /// <summary>
         /// 

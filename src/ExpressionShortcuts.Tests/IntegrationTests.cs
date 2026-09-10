@@ -119,8 +119,8 @@ namespace Expressions.Shortcuts.Tests
                 Expression.Assign(mockVariable, Expression.Constant(_mock)),
                 Expression.Call(
                     mockVariable,
-                    typeof(IMock).GetMethod(nameof(IMock.VoidMethodWithParameter)),
-                    Expression.Property(mockVariable, typeof(IMock).GetProperty(nameof(IMock.String)))
+                    typeof(IMock).GetMethod(nameof(IMock.VoidMethodWithParameter))!,
+                    Expression.Property(mockVariable, typeof(IMock).GetProperty(nameof(IMock.String))!)
                 )
             );
             

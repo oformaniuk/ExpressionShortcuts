@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,7 +20,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="Expression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Arg<T>(Expression expression) => expression == null ? Null<T>() : new ExpressionContainer<T>(expression);
+        public static ExpressionContainer<T> Arg<T>(Expression? expression) => expression == null ? Null<T>() : new ExpressionContainer<T>(expression);
         
         /// <summary>
         /// Creates strongly typed representation of the <see cref="ExpressionContainer.Expression"/>
@@ -39,7 +40,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="Expression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Arg<T>(Expression<T> expression) => expression == null ? Null<T>() : new ExpressionContainer<T>(expression);
+        public static ExpressionContainer<T> Arg<T>(Expression<T>? expression) => expression == null ? Null<T>() : new ExpressionContainer<T>(expression);
         
         /// <summary>
         /// Creates strongly typed representation of the <paramref name="expression"/> and performs <see cref="Expression.Convert(System.Linq.Expressions.Expression,System.Type)"/> on it.
@@ -49,7 +50,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="Expression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Cast<T>(Expression expression) => expression == null ? Null<T>() : new ExpressionContainer<T>(Expression.Convert(expression, typeof(T)));
+        public static ExpressionContainer<T> Cast<T>(Expression? expression) => expression == null ? Null<T>() : new ExpressionContainer<T>(Expression.Convert(expression, typeof(T)));
 
         /// <summary>
         /// Creates strongly typed representation of the <see cref="Expression.Variable(System.Type, System.String)"/>
@@ -58,7 +59,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="ParameterExpression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Var<T>(string name = null)
+        public static ExpressionContainer<T> Var<T>(string? name = null)
         {
             return new ExpressionContainer<T>(Expression.Variable(typeof(T), name ?? typeof(T).Name));
         }
@@ -70,7 +71,7 @@ namespace Expressions.Shortcuts
         /// <typeparam name="T">Expected type of resulting <see cref="ParameterExpression"/></typeparam>
         /// <returns><see cref="ExpressionContainer{T}"/></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ExpressionContainer<T> Parameter<T>(string name = null)
+        public static ExpressionContainer<T> Parameter<T>(string? name = null)
         {
             return new ExpressionContainer<T>(Expression.Parameter(typeof(T), name ?? typeof(T).Name));
         }
@@ -211,14 +212,14 @@ namespace Expressions.Shortcuts
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ExpressionContainer<T> New<T>() where T: new()
         {
-            return Arg<T>(Expression.New(typeof(T).GetConstructor(new Type[0])));
+            return Arg<T>(Expression.New(typeof(T).GetConstructor(Type.EmptyTypes)!));
         }
         
         /// <summary>
         /// Provides fluent interface for <see cref="BlockExpression"/> creation
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static BlockBuilder Block(Type returnType = null)
+        public static BlockBuilder Block(Type? returnType = null)
         {
             return new BlockBuilder(returnType);
         }
@@ -294,7 +295,7 @@ namespace Expressions.Shortcuts
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ConditionBuilder Condition(Type resultType = null)
+        public static ConditionBuilder Condition(Type? resultType = null)
         {
             return new ConditionBuilder(resultType);
         }

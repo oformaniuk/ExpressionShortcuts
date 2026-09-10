@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,7 +17,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// 
         /// </summary>
-        protected Expression DefaultCase;
+        protected Expression? DefaultCase;
         
         /// <summary>
         /// 
@@ -31,7 +32,7 @@ namespace Expressions.Shortcuts
         /// <summary>
         /// 
         /// </summary>
-        protected MethodInfo ComparerMethod { get; set; }
+        protected MethodInfo? ComparerMethod { get; set; }
 
         internal SwitchBuilder(ExpressionContainer<T> value) : base(Expression.Empty())
         {

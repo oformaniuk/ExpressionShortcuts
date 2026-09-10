@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -9,15 +10,15 @@ namespace Expressions.Shortcuts
         private readonly ICollection<Expression> _replacements;
         private readonly bool _addIfMiss;
 
-        public ParameterReplacerVisitor(IEnumerable<Expression> replacements, bool addIfMiss = false)
+        public ParameterReplacerVisitor(IEnumerable<Expression?> replacements, bool addIfMiss = false)
         {
-            _replacements = replacements.Where(o => o != null).ToList();
+            _replacements = replacements.Where(o => o != null).ToList()!;
             _addIfMiss = addIfMiss;
         }
             
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            var replacement = _replacements.FirstOrDefault(o => o?.Type == node.Type);
+            var replacement = _replacements.FirstOrDefault(o => o.Type == node.Type);
             if (replacement == null || replacement == node)
             {
                 if (_addIfMiss)
@@ -27,7 +28,7 @@ namespace Expressions.Shortcuts
                 return base.VisitParameter(node);
             }
             
-            return base.Visit(replacement);
+            return base.Visit(replacement)!;
         }
     }
 }

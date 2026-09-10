@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -6,7 +8,8 @@ namespace Expressions.Shortcuts
 {
     internal class ExpressionExtractorVisitor : ExpressionVisitor
     {
-        public override Expression Visit(Expression node)
+        [return: NotNullIfNotNull("node")]
+        public override Expression? Visit(Expression? node)
         {
             switch (node)
             {
@@ -29,7 +32,7 @@ namespace Expressions.Shortcuts
             {
                 case ConstantExpression constant:
                     var constantValue = constant.Value;
-                    var value = constantValue.GetType().GetField(node.Member.Name)?.GetValue(constantValue);
+                    var value = constantValue!.GetType().GetField(node.Member.Name)?.GetValue(constantValue);
                     if (value is ExpressionContainer) return ConvertToExpression(value, Visit) ?? Expression.Empty();
                     if (value?.GetType() == node.Type) return ConvertToExpression(value, Visit) ?? Expression.Empty();
                     
@@ -70,7 +73,8 @@ namespace Expressions.Shortcuts
             }
         }
 
-        private static Expression ConvertToExpression(object value, Func<Expression, Expression> visit = null)
+        [return: NotNullIfNotNull("visit")]
+        private static Expression? ConvertToExpression(object? value, Func<Expression, Expression>? visit = null)
         {
             if (value is ExpressionContainer expressionContainer) return expressionContainer.Expression;
             if (value is Expression expression) return visit?.Invoke(expression);
